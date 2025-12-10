@@ -7,7 +7,7 @@
 </div>
 <div class="card">
     <div class="card-body">
-        <form method="POST" action="{{ route('users.store') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('users.store') }}">
             @csrf
             <div class="row">
                 <div class="col-md-6 mb-3">
@@ -36,10 +36,6 @@
                         <option value="manajemen" {{ old('role') == 'manajemen' ? 'selected' : '' }}>Manajemen</option>
                         <option value="pimpinan" {{ old('role') == 'pimpinan' ? 'selected' : '' }}>Pimpinan</option>
                     </select>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Foto</label>
-                    <input type="file" name="foto" class="form-control" accept="image/*">
                 </div>
             </div>
             <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i>Simpan</button>

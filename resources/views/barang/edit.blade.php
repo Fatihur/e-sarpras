@@ -52,8 +52,13 @@
                 </div>
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Foto Barang</label>
+                    @if($barang->foto_barang)
+                    <div class="mb-2">
+                        <img src="{{ asset('storage/' . $barang->foto_barang) }}" alt="Foto {{ $barang->nama_barang }}" class="img-thumbnail" style="max-height: 100px;">
+                    </div>
+                    @endif
                     <input type="file" name="foto_barang" class="form-control" accept="image/*">
-                    @if($barang->foto_barang)<small class="text-muted">Foto saat ini tersimpan</small>@endif
+                    <small class="text-muted">Kosongkan jika tidak ingin mengubah foto</small>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i>Update</button>

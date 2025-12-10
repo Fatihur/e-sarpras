@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -27,15 +26,10 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
             'role' => 'required|in:admin,manajemen,pimpinan',
-            'foto' => 'nullable|image|max:2048',
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
         $validated['aktif'] = true;
-
-        if ($request->hasFile('foto')) {
-            $validated['foto'] = $request->file('foto')->store('users', 'public');
-        }
 
         User::create($validated);
 
@@ -54,18 +48,9 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email,' . $user->id,
             'role' => 'required|in:admin,manajemen,pimpinan',
             'aktif' => 'boolean',
-            'foto' => 'nullable|image|max:2048',
         ]);
 
         $validated['aktif'] = $request->has('aktif');
-
-        if ($request->hasFile('foto')) {
-            if ($user->foto) {
-                Storage::disk('public')->delete($user->foto);
-            }
-            $validated['foto'] = $request->file('foto')->store('users', 'public');
-        }
-
         $user->update($validated);
 
         return redirect()->route('users.index')->with('success', 'User berhasil diperbarui.');
@@ -86,9 +71,6 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        if ($user->foto) {
-            Storage::disk('public')->delete($user->foto);
-        }
         $user->delete();
         return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');
     }

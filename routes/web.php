@@ -42,11 +42,7 @@ Route::middleware('auth')->group(function () {
         Route::post('users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
         Route::post('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
 
-        // Transaksi Admin
-        Route::resource('barang-masuk', BarangMasukController::class)->except(['show', 'edit', 'update']);
-        Route::get('barang-masuk/scan', [BarangMasukController::class, 'scan'])->name('barang-masuk.scan');
-        Route::post('barang-masuk/scan', [BarangMasukController::class, 'scanStore'])->name('barang-masuk.scan.store');
-        Route::resource('barang-keluar', BarangKeluarController::class)->except(['show', 'edit', 'update']);
+        // Barang Ruangan Management
         Route::get('barang-ruangan/create', [BarangRuanganController::class, 'create'])->name('barang-ruangan.create');
         Route::post('barang-ruangan', [BarangRuanganController::class, 'store'])->name('barang-ruangan.store');
         Route::delete('barang-ruangan/{barangRuangan}', [BarangRuanganController::class, 'destroy'])->name('barang-ruangan.destroy');
@@ -59,11 +55,19 @@ Route::middleware('auth')->group(function () {
 
     // Admin & Manajemen Routes
     Route::middleware('role:admin,manajemen')->group(function () {
+        // Barang Masuk & Keluar
+        Route::resource('barang-masuk', BarangMasukController::class)->except(['show', 'edit', 'update']);
+        Route::get('barang-masuk/scan', [BarangMasukController::class, 'scan'])->name('barang-masuk.scan');
+        Route::post('barang-masuk/scan', [BarangMasukController::class, 'scanStore'])->name('barang-masuk.scan.store');
+        Route::resource('barang-keluar', BarangKeluarController::class)->except(['show', 'edit', 'update']);
+
+        // Peminjaman
         Route::resource('peminjaman', PeminjamanController::class)->except(['show', 'edit', 'update', 'destroy']);
         Route::post('peminjaman/{peminjaman}/kembalikan', [PeminjamanController::class, 'kembalikan'])->name('peminjaman.kembalikan');
         Route::get('peminjaman/scan', [PeminjamanController::class, 'scan'])->name('peminjaman.scan');
         Route::post('peminjaman/scan', [PeminjamanController::class, 'scanProcess'])->name('peminjaman.scan.process');
 
+        // Barang Rusak
         Route::resource('barang-rusak', BarangRusakController::class)->except(['show', 'edit', 'update']);
         Route::get('barang-rusak/scan', [BarangRusakController::class, 'scan'])->name('barang-rusak.scan');
         Route::post('barang-rusak/scan', [BarangRusakController::class, 'scanStore'])->name('barang-rusak.scan.store');

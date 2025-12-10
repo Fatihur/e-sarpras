@@ -8,6 +8,14 @@
 
 <div class="row">
     <div class="col-lg-8">
+        @if($barang->foto_barang)
+        <div class="card mb-4">
+            <div class="card-header">Foto Barang</div>
+            <div class="card-body text-center">
+                <img src="{{ Storage::url($barang->foto_barang) }}" alt="{{ $barang->nama_barang }}" class="img-fluid rounded" style="max-height: 300px;" onerror="this.parentElement.innerHTML='<p class=\'text-muted\'>Foto tidak ditemukan</p>'">
+            </div>
+        </div>
+        @endif
         <div class="card mb-4">
             <div class="card-header">Informasi Barang</div>
             <div class="card-body">
