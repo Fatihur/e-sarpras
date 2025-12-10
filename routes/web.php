@@ -67,6 +67,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('barang-rusak', BarangRusakController::class)->except(['show', 'edit', 'update']);
         Route::get('barang-rusak/scan', [BarangRusakController::class, 'scan'])->name('barang-rusak.scan');
         Route::post('barang-rusak/scan', [BarangRusakController::class, 'scanStore'])->name('barang-rusak.scan.store');
+        Route::post('barang-rusak/{barangRusak}/update-status', [BarangRusakController::class, 'updateStatus'])->name('barang-rusak.update-status');
 
         // QR Scanner
         Route::get('scan', [ScanController::class, 'index'])->name('scan.index');

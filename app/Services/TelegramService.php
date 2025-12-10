@@ -186,4 +186,43 @@ class TelegramService
 
         $this->kirimNotifikasi('barang_keluar', $pesan);
     }
+
+    public function notifUpdateStatusBarangRusak($barangRusak, string $oldStatus): void
+    {
+        $waktu = now()->format('d/m/Y H:i');
+        
+        $statusLabels = [
+            'dilaporkan' => '📋 Dilaporkan',
+            'diproses' => '🔧 Sedang Diproses',
+            'diperbaiki' => '✅ Sudah Diperbaiki',
+            'tidak_bisa_diperbaiki' => '❌ Tidak Bisa Diperbaiki',
+        ];
+
+        $oldStatusLabel = $statusLabels[$oldStatus] ?? $oldStatus;
+        $newStatusLabel = $statusLabels[$barangRusak->status] ?? $barangRusak->status;
+
+        $emoji = match ($barangRusak->status) {
+            'diproses' => '🔧',
+            'diperbaiki' => '✅',
+            'tidak_bisa_diperbaiki' => '❌',
+            default => '📋',
+        };
+
+        $pesan = "━━━━━━━━━━━━━━━━━━━━━\n"
+            . "{$emoji} <b>UPDATE STATUS PERBAIKAN</b>\n"
+            . "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            . "🏷 <b>Detail Barang</b>\n"
+            . "├ Nama: <code>{$barangRusak->barang->nama_barang}</code>\n"
+            . "├ Kode: <code>{$barangRusak->barang->kode_barang}</code>\n"
+            . "└ Kerusakan: {$barangRusak->jenis_kerusakan}\n\n"
+            . "📊 <b>Perubahan Status</b>\n"
+            . "├ Sebelum: {$oldStatusLabel}\n"
+            . "└ Sesudah: {$newStatusLabel}\n\n"
+            . "📝 <b>Catatan</b>\n"
+            . "└ " . ($barangRusak->catatan_status ?: '-') . "\n\n"
+            . "🕐 <i>Diupdate: {$waktu}</i>\n"
+            . "━━━━━━━━━━━━━━━━━━━━━";
+
+        $this->kirimNotifikasi('barang_rusak', $pesan);
+    }
 }

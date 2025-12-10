@@ -25,7 +25,9 @@ class BarangRuanganController extends Controller
 
     public function show(Ruangan $ruangan)
     {
-        $ruangan->load(['barang', 'gedung']);
+        $ruangan->load(['barang' => function($query) {
+            $query->withPivot('id', 'jumlah', 'keterangan');
+        }, 'gedung']);
         return view('barang-ruangan.show', compact('ruangan'));
     }
 

@@ -110,4 +110,30 @@ class BarangRusakController extends Controller
         $barangRusak->delete();
         return redirect()->route('barang-rusak.index')->with('success', 'Data barang rusak berhasil dihapus.');
     }
+
+    public function updateStatus(Request $request, BarangRusak $barangRusak)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:dilaporkan,diproses,diperbaiki,tidak_bisa_diperbaiki',
+            'catatan_status' => 'nullable|string|max:500',
+        ]);
+
+        $oldStatus = $barangRusak->status ?? 'dilaporkan';
+        
+        $barangRusak->update([
+            'status' => $validated['status'],
+            'catatan_status' => $validated['catatan_status'],
+            'tanggal_update_status' => now(),
+        ]);
+
+        // Update status barang jika sudah diperbaiki
+        if ($validated['status'] === 'diperbaiki') {
+            $barangRusak->barang->update(['status_barang' => 'aktif']);
+        }
+
+        // Kirim notifikasi Telegram
+        (new TelegramService())->notifUpdateStatusBarangRusak($barangRusak->load(['barang', 'ruangan']), $oldStatus);
+
+        return back()->with('success', 'Status barang rusak berhasil diupdate.');
+    }
 }

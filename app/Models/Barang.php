@@ -48,7 +48,7 @@ class Barang extends Model
     public function ruangan(): BelongsToMany
     {
         return $this->belongsToMany(Ruangan::class, 'barang_ruangan')
-            ->withPivot('jumlah', 'keterangan');
+            ->withPivot('id', 'jumlah', 'keterangan');
     }
 
 

@@ -28,10 +28,12 @@
                     <td>{{ $b->pivot->keterangan ?? '-' }}</td>
                     @if(auth()->user()->isAdmin())
                     <td>
+                        @if($b->pivot->id)
                         <form action="{{ route('barang-ruangan.destroy', $b->pivot->id) }}" method="POST" onsubmit="return confirm('Hapus dari ruangan?')">
                             @csrf @method('DELETE')
                             <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
                         </form>
+                        @endif
                     </td>
                     @endif
                 </tr>
