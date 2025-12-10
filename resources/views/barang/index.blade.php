@@ -52,7 +52,13 @@
                         <td>{{ $item->jumlah }} {{ $item->satuan }}</td>
                         <td>
                             @php $statusColors = ['aktif'=>'success','rusak'=>'danger','dipinjam'=>'warning','keluar'=>'secondary','hilang'=>'dark']; @endphp
-                            <span class="badge bg-{{ $statusColors[$item->status_barang] ?? 'secondary' }}">{{ ucfirst($item->status_barang) }}</span>
+                            <span class="badge bg-{{ $statusColors[$item->status_barang] ?? 'secondary' }}">
+                                @if($item->status_barang == 'rusak')
+                                    {{ $item->barangRusak->count() }} Rusak
+                                @else
+                                    {{ ucfirst($item->status_barang) }}
+                                @endif
+                            </span>
                         </td>
                         <td>
                             <button type="button" class="btn btn-sm btn-outline-primary btn-download-qr" data-url="{{ route('barang.download-qr', $item) }}" title="Download QR"><i class="bi bi-qr-code"></i></button>

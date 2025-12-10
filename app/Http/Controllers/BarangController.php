@@ -12,7 +12,7 @@ class BarangController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Barang::with('kategori');
+        $query = Barang::with(['kategori', 'barangRusak']);
 
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
