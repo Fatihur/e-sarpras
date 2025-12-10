@@ -8,8 +8,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #4f46e5;
-            --secondary-color: #6366f1;
+            --primary-color: #78C841;
+            --secondary-color: #5fb030;
+            --primary-dark: #4a9928;
         }
         * {
             margin: 0;
@@ -25,13 +26,34 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, var(--primary-color) 0%, #3730a3 100%);
+            background: url('{{ asset('bg-login.jpg') }}') no-repeat center center fixed;
+            background-size: cover;
             font-family: 'Segoe UI', system-ui, sans-serif;
             padding: 1rem;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(45, 80, 22, 0.7);
+            z-index: 0;
         }
         .login-container {
+            position: relative;
+            z-index: 1;
             width: 100%;
             max-width: 420px;
+        }
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin: 0 auto 1rem;
+            display: block;
         }
         .login-card {
             background: #fff;
@@ -40,30 +62,19 @@
             overflow: hidden;
         }
         .login-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: #fff;
+            background: #fff;
+            color: #333;
             padding: 2rem 1.5rem;
             text-align: center;
-        }
-        .login-header .icon-wrapper {
-            width: 70px;
-            height: 70px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-        }
-        .login-header .icon-wrapper i {
-            font-size: 2rem;
+            border-bottom: 1px solid #e2e8f0;
         }
         .login-header h4 {
             font-weight: 700;
             margin-bottom: 0.25rem;
+            color: #78C841;
         }
         .login-header small {
-            opacity: 0.9;
+            color: #64748b;
         }
         .login-body {
             padding: 2rem 1.5rem;
@@ -86,7 +97,7 @@
         }
         .form-control:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+            box-shadow: 0 0 0 3px rgba(120,200,65,0.25);
         }
         .input-group .form-control {
             border-top-left-radius: 0;
@@ -97,7 +108,7 @@
             border-bottom-left-radius: 8px;
         }
         .btn-login {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background: #78C841;
             border: none;
             padding: 0.875rem;
             border-radius: 8px;
@@ -106,9 +117,9 @@
             transition: all 0.2s;
         }
         .btn-login:hover {
-            background: linear-gradient(135deg, #4338ca, var(--primary-color));
+            background: #4a9928;
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(79,70,229,0.4);
+            box-shadow: 0 4px 12px rgba(120,200,65,0.4);
         }
         .btn-login:active {
             transform: translateY(0);
@@ -141,12 +152,9 @@
             .login-header {
                 padding: 1.5rem 1rem;
             }
-            .login-header .icon-wrapper {
+            .login-logo {
                 width: 60px;
                 height: 60px;
-            }
-            .login-header .icon-wrapper i {
-                font-size: 1.75rem;
             }
             .login-body {
                 padding: 1.5rem 1rem;
@@ -161,11 +169,9 @@
     <div class="login-container">
         <div class="login-card">
             <div class="login-header">
-                <div class="icon-wrapper">
-                    <i class="bi bi-box-seam"></i>
-                </div>
+                <img src="{{ asset('mq.png') }}" alt="Logo" class="login-logo">
                 <h4>e-Sarpras</h4>
-                <small>Sistem Sarana & Prasarana</small>
+                <small>Sistem Sarana & Prasarana Pesantren</small>
             </div>
             <div class="login-body">
                 @if($errors->any())

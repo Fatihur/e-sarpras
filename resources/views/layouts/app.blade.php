@@ -10,10 +10,10 @@
     <link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet">
     <style>
-        :root { --sidebar-width: 260px; --primary-color: #4f46e5; --secondary-color: #6366f1; }
+        :root { --sidebar-width: 260px; --primary-color: #78C841; --secondary-color: #5fb030; --primary-dark: #4a9928; }
         html { height: 100%; height: -webkit-fill-available; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f1f5f9; overflow-x: hidden; min-height: 100%; min-height: 100dvh; }
-        .sidebar { width: var(--sidebar-width); height: 100vh; height: 100dvh; position: fixed; left: 0; top: 0; bottom: 0; background: linear-gradient(180deg, var(--primary-color) 0%, #3730a3 100%); z-index: 1050; transition: transform 0.3s ease; display: flex; flex-direction: column; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f4f9f2; overflow-x: hidden; min-height: 100%; min-height: 100dvh; }
+        .sidebar { width: var(--sidebar-width); height: 100vh; height: 100dvh; position: fixed; left: 0; top: 0; bottom: 0; background: #2d5016; z-index: 1050; transition: transform 0.3s ease; display: flex; flex-direction: column; }
         .sidebar-header { padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
         .sidebar-header h4 { color: #fff; font-weight: 700; margin: 0; font-size: 1.25rem; }
         .sidebar-nav { padding: 1rem 0; flex: 1; overflow-y: auto; overflow-x: hidden; }
@@ -31,16 +31,22 @@
         .card { border: none; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .card-header { background: #fff; border-bottom: 1px solid #e2e8f0; padding: 1rem 1.25rem; font-weight: 600; }
         .stat-card { border-radius: 12px; padding: 1.25rem; color: #fff; }
-        .stat-card.primary { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); }
-        .stat-card.success { background: linear-gradient(135deg, #10b981, #059669); }
-        .stat-card.warning { background: linear-gradient(135deg, #f59e0b, #d97706); }
-        .stat-card.danger { background: linear-gradient(135deg, #ef4444, #dc2626); }
-        .stat-card.info { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+        .stat-card.primary { background: #78C841; }
+        .stat-card.success { background: #16a34a; }
+        .stat-card.warning { background: #ca8a04; }
+        .stat-card.danger { background: #dc2626; }
+        .stat-card.info { background: #0d9488; }
         .stat-card .stat-icon { font-size: 2.5rem; opacity: 0.3; position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); }
         .stat-card .stat-value { font-size: 1.75rem; font-weight: 700; }
         .stat-card .stat-label { font-size: 0.875rem; opacity: 0.9; }
         .btn-primary { background: var(--primary-color); border-color: var(--primary-color); }
-        .btn-primary:hover { background: #4338ca; border-color: #4338ca; }
+        .btn-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+        .bg-primary { background-color: var(--primary-color) !important; }
+        .btn-outline-primary { color: var(--primary-color); border-color: var(--primary-color); }
+        .btn-outline-primary:hover { background: var(--primary-color); border-color: var(--primary-color); }
+        .text-primary { color: var(--primary-color) !important; }
+        a { color: var(--primary-color); }
+        a:hover { color: var(--primary-dark); }
         .table th { font-weight: 600; color: #475569; background: #f8fafc; }
         .badge { font-weight: 500; padding: 0.4em 0.8em; }
         /* DataTables Custom Styling */
@@ -112,7 +118,7 @@
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header d-flex justify-content-between align-items-center">
-            <h4 class="mb-0"><i class="bi bi-box-seam me-2"></i>e-Sarpras</h4>
+            <h4 class="mb-0"><i class="bi bi-building me-2"></i>e-Sarpras</h4>
             <button class="btn btn-link text-white d-lg-none p-0" onclick="toggleSidebar()">
                 <i class="bi bi-x-lg"></i>
             </button>
