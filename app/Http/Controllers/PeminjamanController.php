@@ -24,7 +24,7 @@ class PeminjamanController extends Controller
             $query->whereDate('tanggal_pinjam', '<=', $request->tanggal_sampai);
         }
 
-        $peminjaman = $query->orderBy('tanggal_pinjam', 'desc')->paginate(10);
+        $peminjaman = $query->orderBy('tanggal_pinjam', 'desc')->get();
         return view('peminjaman.index', compact('peminjaman'));
     }
 

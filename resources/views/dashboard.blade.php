@@ -3,29 +3,29 @@
 @section('content')
 <h4 class="mb-4">Dashboard</h4>
 
-<div class="row g-4 mb-4">
-    <div class="col-md-6 col-xl-3">
+<div class="row g-3 g-md-4 mb-4">
+    <div class="col-6 col-md-6 col-xl-3">
         <div class="stat-card primary position-relative">
             <i class="bi bi-box stat-icon"></i>
             <div class="stat-value">{{ number_format($data['totalBarang']) }}</div>
             <div class="stat-label">Total Barang</div>
         </div>
     </div>
-    <div class="col-md-6 col-xl-3">
+    <div class="col-6 col-md-6 col-xl-3">
         <div class="stat-card danger position-relative">
             <i class="bi bi-exclamation-triangle stat-icon"></i>
             <div class="stat-value">{{ number_format($data['totalBarangRusak']) }}</div>
             <div class="stat-label">Barang Rusak</div>
         </div>
     </div>
-    <div class="col-md-6 col-xl-3">
+    <div class="col-6 col-md-6 col-xl-3">
         <div class="stat-card success position-relative">
             <i class="bi bi-box-arrow-in-down stat-icon"></i>
             <div class="stat-value">{{ number_format($data['totalBarangMasuk']) }}</div>
             <div class="stat-label">Barang Masuk</div>
         </div>
     </div>
-    <div class="col-md-6 col-xl-3">
+    <div class="col-6 col-md-6 col-xl-3">
         <div class="stat-card warning position-relative">
             <i class="bi bi-box-arrow-up stat-icon"></i>
             <div class="stat-value">{{ number_format($data['totalBarangKeluar']) }}</div>
@@ -34,22 +34,22 @@
     </div>
 </div>
 
-<div class="row g-4 mb-4">
-    <div class="col-md-6 col-xl-4">
+<div class="row g-3 g-md-4 mb-4">
+    <div class="col-6 col-md-6 col-xl-4">
         <div class="stat-card info position-relative">
             <i class="bi bi-arrow-left-right stat-icon"></i>
             <div class="stat-value">{{ number_format($data['totalPeminjamanAktif']) }}</div>
             <div class="stat-label">Peminjaman Aktif</div>
         </div>
     </div>
-    <div class="col-md-6 col-xl-4">
+    <div class="col-6 col-md-6 col-xl-4">
         <div class="stat-card success position-relative">
             <i class="bi bi-check-circle stat-icon"></i>
             <div class="stat-value">{{ number_format($data['totalPeminjamanSelesai']) }}</div>
             <div class="stat-label">Peminjaman Selesai</div>
         </div>
     </div>
-    <div class="col-md-6 col-xl-4">
+    <div class="col-12 col-md-6 col-xl-4">
         <div class="stat-card primary position-relative">
             <i class="bi bi-door-open stat-icon"></i>
             <div class="stat-value">{{ number_format($data['totalBarangRuangan']) }}</div>
@@ -119,15 +119,17 @@
         <div class="card">
             <div class="card-body text-center py-4">
                 <h5 class="mb-3">Quick Actions</h5>
-                <a href="{{ route('scan.index') }}" class="btn btn-primary btn-lg me-2">
-                    <i class="bi bi-qr-code-scan me-2"></i>Scan QR Code
-                </a>
-                <a href="{{ route('peminjaman.create') }}" class="btn btn-success btn-lg me-2">
-                    <i class="bi bi-plus-circle me-2"></i>Peminjaman Baru
-                </a>
-                <a href="{{ route('barang-rusak.create') }}" class="btn btn-danger btn-lg">
-                    <i class="bi bi-exclamation-triangle me-2"></i>Lapor Barang Rusak
-                </a>
+                <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
+                    <a href="{{ route('scan.index') }}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-qr-code-scan me-2"></i>Scan QR Code
+                    </a>
+                    <a href="{{ route('peminjaman.create') }}" class="btn btn-success btn-lg">
+                        <i class="bi bi-plus-circle me-2"></i>Peminjaman Baru
+                    </a>
+                    <a href="{{ route('barang-rusak.create') }}" class="btn btn-danger btn-lg">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Lapor Barang Rusak
+                    </a>
+                </div>
             </div>
         </div>
     </div>

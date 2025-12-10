@@ -10,7 +10,7 @@ class GedungController extends Controller
 {
     public function index()
     {
-        $gedung = Gedung::with('lahan')->paginate(10);
+        $gedung = Gedung::with('lahan')->get();
         return view('gedung.index', compact('gedung'));
     }
 

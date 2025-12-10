@@ -21,7 +21,7 @@ class BarangMasukController extends Controller
             $query->whereDate('tanggal_masuk', '<=', $request->tanggal_sampai);
         }
 
-        $barangMasuk = $query->orderBy('tanggal_masuk', 'desc')->paginate(10);
+        $barangMasuk = $query->orderBy('tanggal_masuk', 'desc')->get();
         return view('barang-masuk.index', compact('barangMasuk'));
     }
 

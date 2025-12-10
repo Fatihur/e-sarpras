@@ -7,10 +7,13 @@
     <title>@yield('title', 'e-Sarpras')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet">
     <style>
         :root { --sidebar-width: 260px; --primary-color: #4f46e5; --secondary-color: #6366f1; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f1f5f9; overflow-x: hidden; }
-        .sidebar { width: var(--sidebar-width); height: 100vh; position: fixed; left: 0; top: 0; background: linear-gradient(180deg, var(--primary-color) 0%, #3730a3 100%); z-index: 1050; transition: transform 0.3s ease; display: flex; flex-direction: column; }
+        html { height: 100%; height: -webkit-fill-available; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f1f5f9; overflow-x: hidden; min-height: 100%; min-height: 100dvh; }
+        .sidebar { width: var(--sidebar-width); height: 100vh; height: 100dvh; position: fixed; left: 0; top: 0; bottom: 0; background: linear-gradient(180deg, var(--primary-color) 0%, #3730a3 100%); z-index: 1050; transition: transform 0.3s ease; display: flex; flex-direction: column; }
         .sidebar-header { padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
         .sidebar-header h4 { color: #fff; font-weight: 700; margin: 0; font-size: 1.25rem; }
         .sidebar-nav { padding: 1rem 0; flex: 1; overflow-y: auto; overflow-x: hidden; }
@@ -40,12 +43,64 @@
         .btn-primary:hover { background: #4338ca; border-color: #4338ca; }
         .table th { font-weight: 600; color: #475569; background: #f8fafc; }
         .badge { font-weight: 500; padding: 0.4em 0.8em; }
-        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1040; }
+        /* DataTables Custom Styling */
+        .dataTables_wrapper .dataTables_length select { min-width: 80px; }
+        .dataTables_wrapper .dataTables_filter input { border-radius: 8px; border: 1px solid #e2e8f0; padding: 0.5rem 1rem; }
+        .dataTables_wrapper .dataTables_info { color: #64748b; font-size: 0.875rem; }
+        .dataTables_wrapper .dataTables_paginate .paginate_button { border-radius: 6px !important; }
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current { background: var(--primary-color) !important; border-color: var(--primary-color) !important; color: #fff !important; }
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover { background: #e2e8f0 !important; border-color: #e2e8f0 !important; }
+        table.dataTable { border-collapse: collapse !important; }
+        table.dataTable thead th { border-bottom: 2px solid #e2e8f0 !important; }
+        table.dataTable tbody td { border-bottom: 1px solid #f1f5f9 !important; vertical-align: middle; }
+        div.dataTables_wrapper div.dataTables_length { margin-bottom: 1rem; }
+        div.dataTables_wrapper div.dataTables_filter { margin-bottom: 1rem; }
+        @media (max-width: 767px) {
+            .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter { text-align: left !important; }
+            .dataTables_wrapper .dataTables_filter input { width: 100% !important; margin-left: 0 !important; }
+            .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_paginate { text-align: center !important; margin-top: 0.5rem; }
+        }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; height: 100dvh; background: rgba(0,0,0,0.5); z-index: 1040; }
         .sidebar-overlay.show { display: block; }
         @media (max-width: 991px) { 
-            .sidebar { transform: translateX(-100%); } 
+            .sidebar { 
+                transform: translateX(-100%); 
+                width: 280px;
+                height: 100%;
+                min-height: 100vh;
+                min-height: -webkit-fill-available;
+            } 
             .sidebar.show { transform: translateX(0); } 
             .main-content { margin-left: 0; } 
+            html { height: -webkit-fill-available; }
+        }
+        @media (max-width: 767px) {
+            .content-wrapper { padding: 1rem; }
+            .top-navbar { padding: 0.75rem 1rem; }
+            .top-navbar .d-flex { flex-wrap: wrap; gap: 0.5rem !important; }
+            .top-navbar .badge { display: none; }
+            .stat-card { padding: 1rem; }
+            .stat-card .stat-value { font-size: 1.5rem; }
+            .stat-card .stat-icon { font-size: 2rem; }
+            .card-header { padding: 0.75rem 1rem; }
+            .card-body { padding: 1rem; }
+            .table { font-size: 0.875rem; }
+            .table th, .table td { padding: 0.5rem; white-space: nowrap; }
+            .btn { padding: 0.375rem 0.75rem; font-size: 0.875rem; }
+            .btn-sm { padding: 0.25rem 0.5rem; font-size: 0.75rem; }
+            h4 { font-size: 1.25rem; }
+            .d-flex.justify-content-between { flex-direction: column; gap: 1rem; align-items: flex-start !important; }
+            .d-flex.justify-content-between > div { width: 100%; display: flex; gap: 0.5rem; }
+            .d-flex.justify-content-between > a.btn { width: 100%; }
+            .form-control, .form-select { font-size: 0.875rem; }
+            .row.g-3 > [class*="col-"] { margin-bottom: 0.5rem; }
+            .alert { font-size: 0.875rem; padding: 0.75rem; }
+        }
+        @media (max-width: 575px) {
+            .content-wrapper { padding: 0.75rem; }
+            .table-responsive { margin: 0 -1rem; padding: 0 1rem; }
+            .btn-group-mobile { display: flex; flex-direction: column; gap: 0.5rem; }
+            .btn-group-mobile .btn { width: 100%; }
         }
     </style>
     @stack('styles')
@@ -166,6 +221,11 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
     <script>
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('show');

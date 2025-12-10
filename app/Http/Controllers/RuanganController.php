@@ -10,7 +10,7 @@ class RuanganController extends Controller
 {
     public function index()
     {
-        $ruangan = Ruangan::with('gedung')->paginate(10);
+        $ruangan = Ruangan::with('gedung')->get();
         return view('ruangan.index', compact('ruangan'));
     }
 

@@ -29,7 +29,7 @@ class BarangController extends Controller
             $query->where('status_barang', $request->status);
         }
 
-        $barang = $query->orderBy('id', 'desc')->paginate(10);
+        $barang = $query->orderBy('id', 'desc')->get();
         $kategori = Kategori::all();
 
         return view('barang.index', compact('barang', 'kategori'));

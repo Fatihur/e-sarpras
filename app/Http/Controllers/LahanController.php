@@ -9,7 +9,7 @@ class LahanController extends Controller
 {
     public function index()
     {
-        $lahan = Lahan::paginate(10);
+        $lahan = Lahan::all();
         return view('lahan.index', compact('lahan'));
     }
 
