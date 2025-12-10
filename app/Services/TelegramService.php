@@ -123,7 +123,7 @@ class TelegramService
         $waktu = now()->format('d/m/Y H:i');
         $lokasi = $barangRusak->lokasi === 'dalam_ruangan' 
             ? "📍 Ruangan: {$barangRusak->ruangan->nama_ruangan}" 
-            : "� Lokabsi: Luar Ruangan";
+            : "� Lokasi: Luar Ruangan";
 
         $pesan = "━━━━━━━━━━━━━━━━━━━━━\n"
             . "⚠️ <b>LAPORAN BARANG RUSAK</b>\n"
