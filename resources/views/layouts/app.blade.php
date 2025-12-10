@@ -158,9 +158,9 @@
             <a href="{{ route('barang-rusak.index') }}" class="nav-link {{ request()->routeIs('barang-rusak.*') ? 'active' : '' }}">
                 <i class="bi bi-exclamation-triangle"></i> Barang Rusak
             </a>
-            <a href="{{ route('scan.index') }}" class="nav-link {{ request()->routeIs('scan.*') ? 'active' : '' }}">
+            {{-- <a href="{{ route('scan.index') }}" class="nav-link {{ request()->routeIs('scan.*') ? 'active' : '' }}">
                 <i class="bi bi-qr-code-scan"></i> Scan QR
-            </a>
+            </a> --}}
             @endif
 
             <a href="{{ route('barang-ruangan.index') }}" class="nav-link {{ request()->routeIs('barang-ruangan.*') ? 'active' : '' }}">
