@@ -44,6 +44,8 @@ Route::middleware('auth')->group(function () {
 
         // Transaksi Admin
         Route::resource('barang-masuk', BarangMasukController::class)->except(['show', 'edit', 'update']);
+        Route::get('barang-masuk/scan', [BarangMasukController::class, 'scan'])->name('barang-masuk.scan');
+        Route::post('barang-masuk/scan', [BarangMasukController::class, 'scanStore'])->name('barang-masuk.scan.store');
         Route::resource('barang-keluar', BarangKeluarController::class)->except(['show', 'edit', 'update']);
         Route::get('barang-ruangan/create', [BarangRuanganController::class, 'create'])->name('barang-ruangan.create');
         Route::post('barang-ruangan', [BarangRuanganController::class, 'store'])->name('barang-ruangan.store');

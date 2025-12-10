@@ -3,7 +3,10 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h4 class="mb-0">Barang Masuk</h4>
-    <a href="{{ route('barang-masuk.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Tambah</a>
+    <div>
+        <a href="{{ route('barang-masuk.scan') }}" class="btn btn-info me-2"><i class="bi bi-qr-code-scan me-1"></i>Scan QR</a>
+        <a href="{{ route('barang-masuk.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Tambah</a>
+    </div>
 </div>
 <div class="card mb-4">
     <div class="card-body">
