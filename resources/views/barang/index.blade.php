@@ -55,6 +55,8 @@
                             <span class="badge bg-{{ $statusColors[$item->status_barang] ?? 'secondary' }}">
                                 @if($item->status_barang == 'rusak')
                                     {{ $item->barangRusak->count() }} Rusak
+                                @elseif($item->status_barang == 'dipinjam')
+                                    {{ $item->peminjaman->where('status', 'dipinjam')->count() }} Dipinjam
                                 @else
                                     {{ ucfirst($item->status_barang) }}
                                 @endif
