@@ -13,7 +13,7 @@
         :root { --sidebar-width: 260px; --primary-color: #78C841; --secondary-color: #5fb030; --primary-dark: #4a9928; }
         html { height: 100%; height: -webkit-fill-available; }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f4f9f2; overflow-x: hidden; min-height: 100%; min-height: 100dvh; }
-        .sidebar { width: var(--sidebar-width); height: 100vh; height: 100dvh; position: fixed; left: 0; top: 0; bottom: 0; background: #2d5016; z-index: 1050; transition: transform 0.3s ease; display: flex; flex-direction: column; }
+        .sidebar { width: var(--sidebar-width); height: 100vh; height: 100dvh; position: fixed; left: 0; top: 0; bottom: 0; background: #0d9488; z-index: 1050; transition: transform 0.3s ease; display: flex; flex-direction: column; }
         .sidebar-header { padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
         .sidebar-header h4 { color: #fff; font-weight: 700; margin: 0; font-size: 1.25rem; }
         .sidebar-nav { padding: 1rem 0; flex: 1; overflow-y: auto; overflow-x: hidden; }
@@ -148,7 +148,7 @@
             @endif
 
             <div class="nav-section">Transaksi</div>
-            @if(auth()->user()->isAdmin())
+            @if(auth()->user()->isAdmin() || auth()->user()->isManajemen())
             <a href="{{ route('barang-masuk.index') }}" class="nav-link {{ request()->routeIs('barang-masuk.*') ? 'active' : '' }}">
                 <i class="bi bi-box-arrow-in-down"></i> Barang Masuk
             </a>
