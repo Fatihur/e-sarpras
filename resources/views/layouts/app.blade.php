@@ -119,7 +119,10 @@
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header d-flex justify-content-between align-items-center">
-            <h4 class="mb-0"><i class="bi bi-building me-2"></i>e-Sarpras</h4>
+             <h4 class="mb-0">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo e-Sarpras" style="height: 45px; width: auto;" class="me-2">
+        e-Sarpras
+    </h4>
             <button class="btn btn-link text-white d-lg-none p-0" onclick="toggleSidebar()">
                 <i class="bi bi-x-lg"></i>
             </button>
