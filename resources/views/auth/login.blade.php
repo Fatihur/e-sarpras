@@ -26,7 +26,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: url('{{ asset('bg-login.jpg') }}') no-repeat center center fixed;
+            background: url('{{ asset('images/bg-login.jpg') }}') no-repeat center center fixed;
             background-size: cover;
             font-family: 'Segoe UI', system-ui, sans-serif;
             padding: 1rem;

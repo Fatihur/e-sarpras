@@ -64,6 +64,7 @@ Route::middleware('auth')->group(function () {
         // Peminjaman
         Route::resource('peminjaman', PeminjamanController::class)->except(['show', 'edit', 'update', 'destroy']);
         Route::post('peminjaman/{peminjaman}/kembalikan', [PeminjamanController::class, 'kembalikan'])->name('peminjaman.kembalikan');
+        Route::delete('peminjaman/{peminjaman}', [PeminjamanController::class, 'destroy'])->name('peminjaman.destroy');
         Route::get('peminjaman/scan', [PeminjamanController::class, 'scan'])->name('peminjaman.scan');
         Route::post('peminjaman/scan', [PeminjamanController::class, 'scanProcess'])->name('peminjaman.scan.process');
 

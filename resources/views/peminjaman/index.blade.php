@@ -38,6 +38,19 @@
                                 <button class="btn btn-sm btn-success" title="Kembalikan"><i class="bi bi-check-lg"></i></button>
                             </form>
                             @endif
+
+                            {{-- Tombol Delete --}}
+                    <form action="{{ route('peminjaman.destroy', $item) }}"
+                        method="POST"
+                        class="d-inline"
+                        onsubmit="return confirm('Yakin hapus data peminjaman ini?')">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-sm btn-danger" title="Hapus">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                </td>
                         </td>
                     </tr>
                     @endforeach

@@ -74,6 +74,22 @@ class PeminjamanController extends Controller
 
         return back()->with('success', 'Barang berhasil dikembalikan.');
     }
+    public function destroy(Peminjaman $peminjaman)
+    {
+        if ($peminjaman->status === 'dipinjam') {
+            return back()->with('error', 'Barang masih dipinjam, tidak bisa dihapus.');
+        }
+
+        if ($peminjaman->barang) {
+            $peminjaman->barang->update([
+                'status_barang' => 'aktif'
+            ]);
+        }
+
+        $peminjaman->delete();
+
+        return back()->with('success', 'Data peminjaman berhasil dihapus.');
+    }
 
     public function scan()
     {
