@@ -30,29 +30,12 @@ Route::middleware('auth')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | ADMIN & PIMPINAN - READ ONLY MASTER DATA
-    |--------------------------------------------------------------------------
-    */
-    Route::middleware('role:admin,pimpinan')->group(function () {
-
-        // Master Data (Read Only - Index & Show)
-        Route::get('kategori', [KategoriController::class, 'index'])->name('kategori.index');
-        Route::get('lahan', [LahanController::class, 'index'])->name('lahan.index');
-        Route::get('gedung', [GedungController::class, 'index'])->name('gedung.index');
-        Route::get('ruangan', [RuanganController::class, 'index'])->name('ruangan.index');
-        Route::get('barang', [BarangController::class, 'index'])->name('barang.index');
-        Route::get('barang/{barang}', [BarangController::class, 'show'])->name('barang.show');
-        Route::get('barang/{barang}/download-qr', [BarangController::class, 'downloadQr'])->name('barang.download-qr');
-    });
-
-    /*
-    |--------------------------------------------------------------------------
     | ADMIN ONLY - CRUD MASTER DATA
     |--------------------------------------------------------------------------
     */
     Route::middleware('role:admin')->group(function () {
 
-        // Kategori CRUD (except index which is shared)
+        // Kategori CRUD
         Route::get('kategori/create', [KategoriController::class, 'create'])->name('kategori.create');
         Route::post('kategori', [KategoriController::class, 'store'])->name('kategori.store');
         Route::get('kategori/{kategori}/edit', [KategoriController::class, 'edit'])->name('kategori.edit');
@@ -80,7 +63,7 @@ Route::middleware('auth')->group(function () {
         Route::put('ruangan/{ruangan}', [RuanganController::class, 'update'])->name('ruangan.update');
         Route::delete('ruangan/{ruangan}', [RuanganController::class, 'destroy'])->name('ruangan.destroy');
 
-        // Barang CRUD (except index, show, download-qr which are shared)
+        // Barang CRUD
         Route::get('barang/create', [BarangController::class, 'create'])->name('barang.create');
         Route::post('barang', [BarangController::class, 'store'])->name('barang.store');
         Route::get('barang/{barang}/edit', [BarangController::class, 'edit'])->name('barang.edit');
@@ -96,6 +79,23 @@ Route::middleware('auth')->group(function () {
         Route::get('telegram', [TelegramController::class, 'index'])->name('telegram.index');
         Route::post('telegram', [TelegramController::class, 'update'])->name('telegram.update');
         Route::post('telegram/test', [TelegramController::class, 'testNotifikasi'])->name('telegram.test');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | ADMIN & PIMPINAN - READ ONLY MASTER DATA
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware('role:admin,pimpinan')->group(function () {
+
+        // Master Data (Read Only - Index & Show)
+        Route::get('kategori', [KategoriController::class, 'index'])->name('kategori.index');
+        Route::get('lahan', [LahanController::class, 'index'])->name('lahan.index');
+        Route::get('gedung', [GedungController::class, 'index'])->name('gedung.index');
+        Route::get('ruangan', [RuanganController::class, 'index'])->name('ruangan.index');
+        Route::get('barang', [BarangController::class, 'index'])->name('barang.index');
+        Route::get('barang/{barang}', [BarangController::class, 'show'])->name('barang.show');
+        Route::get('barang/{barang}/download-qr', [BarangController::class, 'downloadQr'])->name('barang.download-qr');
     });
 
     /*

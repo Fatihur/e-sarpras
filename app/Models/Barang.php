@@ -125,14 +125,31 @@ class Barang extends Model
             ->count();
 
         // Hitung jumlah yang rusak (belum diperbaiki - dilaporkan atau diproses)
-        $rusak = $this->barangRusak()
-            ->whereIn('status', ['dilaporkan', 'diproses'])
-            ->sum('jumlah');
+        // Coba sum jumlah, jika kolom tidak ada gunakan count sebagai fallback
+        try {
+            $rusak = $this->barangRusak()
+                ->whereIn('status', ['dilaporkan', 'diproses'])
+                ->sum('jumlah') ?: $this->barangRusak()
+                    ->whereIn('status', ['dilaporkan', 'diproses'])
+                    ->count();
+        } catch (\Exception $e) {
+            $rusak = $this->barangRusak()
+                ->whereIn('status', ['dilaporkan', 'diproses'])
+                ->count();
+        }
 
         // Jumlah tidak bisa diperbaiki (dianggap disposed/tidak bisa digunakan)
-        $tidakBisaDiperbaiki = $this->barangRusak()
-            ->where('status', 'tidak_bisa_diperbaiki')
-            ->sum('jumlah');
+        try {
+            $tidakBisaDiperbaiki = $this->barangRusak()
+                ->where('status', 'tidak_bisa_diperbaiki')
+                ->sum('jumlah') ?: $this->barangRusak()
+                    ->where('status', 'tidak_bisa_diperbaiki')
+                    ->count();
+        } catch (\Exception $e) {
+            $tidakBisaDiperbaiki = $this->barangRusak()
+                ->where('status', 'tidak_bisa_diperbaiki')
+                ->count();
+        }
 
         // Aktif = total - dipinjam - rusak - tidak bisa diperbaiki
         $aktif = max(0, $totalJumlah - $dipinjam - $rusak - $tidakBisaDiperbaiki);
