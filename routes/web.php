@@ -35,7 +35,7 @@ Route::middleware('auth')->group(function () {
     */
     Route::middleware('role:admin')->group(function () {
 
-        // Master Data
+        // Master Data (Full CRUD)
         Route::resource('kategori', KategoriController::class)->except('show');
         Route::resource('lahan', LahanController::class)->except('show');
         Route::resource('gedung', GedungController::class)->except('show');
@@ -52,6 +52,23 @@ Route::middleware('auth')->group(function () {
         Route::get('telegram', [TelegramController::class, 'index'])->name('telegram.index');
         Route::post('telegram', [TelegramController::class, 'update'])->name('telegram.update');
         Route::post('telegram/test', [TelegramController::class, 'testNotifikasi'])->name('telegram.test');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | PIMPINAN - READ ONLY MASTER DATA
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware('role:pimpinan')->group(function () {
+
+        // Master Data (Read Only)
+        Route::get('kategori', [KategoriController::class, 'index'])->name('kategori.index');
+        Route::get('lahan', [LahanController::class, 'index'])->name('lahan.index');
+        Route::get('gedung', [GedungController::class, 'index'])->name('gedung.index');
+        Route::get('ruangan', [RuanganController::class, 'index'])->name('ruangan.index');
+        Route::get('barang', [BarangController::class, 'index'])->name('barang.index');
+        Route::get('barang/{barang}', [BarangController::class, 'show'])->name('barang.show');
+        Route::get('barang/{barang}/download-qr', [BarangController::class, 'downloadQr'])->name('barang.download-qr');
     });
 
     /*

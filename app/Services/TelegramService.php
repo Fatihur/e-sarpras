@@ -27,7 +27,7 @@ class TelegramService
 
         try {
             $url = "https://api.telegram.org/bot{$this->pengaturan->bot_token}/sendMessage";
-            
+
             $response = Http::post($url, [
                 'chat_id' => $this->pengaturan->group_id,
                 'text' => $pesan,
@@ -35,7 +35,7 @@ class TelegramService
             ]);
 
             $status = $response->successful() ? 'terkirim' : 'gagal';
-            
+
             LogNotifikasi::create([
                 'tipe_notifikasi' => $tipe,
                 'pesan' => $pesan,
@@ -74,7 +74,7 @@ class TelegramService
     {
         $waktu = now()->format('d/m/Y H:i');
         $rencanaKembali = $peminjaman->tanggal_kembali ? $peminjaman->tanggal_kembali->format('d/m/Y') : 'Belum ditentukan';
-        
+
         $pesan = "━━━━━━━━━━━━━━━━━━━━━\n"
             . "📦 <b>PEMINJAMAN BARANG</b>\n"
             . "━━━━━━━━━━━━━━━━━━━━━\n\n"
@@ -98,7 +98,7 @@ class TelegramService
     {
         $waktu = now()->format('d/m/Y H:i');
         $durasi = $peminjaman->tanggal_pinjam->diffInDays($peminjaman->tanggal_dikembalikan);
-        
+
         $pesan = "━━━━━━━━━━━━━━━━━━━━━\n"
             . "✅ <b>PENGEMBALIAN BARANG</b>\n"
             . "━━━━━━━━━━━━━━━━━━━━━\n\n"
@@ -121,9 +121,9 @@ class TelegramService
     public function notifBarangRusak($barangRusak): void
     {
         $waktu = now()->format('d/m/Y H:i');
-        $lokasi = $barangRusak->lokasi === 'dalam_ruangan' 
-            ? "📍 Ruangan: {$barangRusak->ruangan->nama_ruangan}" 
-            : "� Lokasi: Luar Ruangan";
+        $lokasi = $barangRusak->lokasi === 'dalam_ruangan'
+            ? "📍 Ruangan: " . ($barangRusak->ruangan->nama_ruangan ?? 'Tidak ditentukan')
+            : "📍 Lokasi: Luar Ruangan";
 
         $pesan = "━━━━━━━━━━━━━━━━━━━━━\n"
             . "⚠️ <b>LAPORAN BARANG RUSAK</b>\n"
@@ -131,11 +131,12 @@ class TelegramService
             . "🏷 <b>Detail Barang</b>\n"
             . "├ Nama: <code>{$barangRusak->barang->nama_barang}</code>\n"
             . "├ Kode: <code>{$barangRusak->barang->kode_barang}</code>\n"
+            . "├ Jumlah Rusak: {$barangRusak->jumlah} unit\n"
             . "└ {$lokasi}\n\n"
             . "🔧 <b>Kerusakan</b>\n"
             . "├ Jenis: {$barangRusak->jenis_kerusakan}\n"
             . "├ Tanggal: {$barangRusak->tanggal_rusak->format('d/m/Y')}\n"
-            . "└ Keterangan: " . ($barangRusak->keterangan ?: '-') . "\n\n"
+            . "└ Deskripsi: " . ($barangRusak->deskripsi_kerusakan ?: '-') . "\n\n"
             . "🕐 <i>Dilaporkan: {$waktu}</i>\n"
             . "━━━━━━━━━━━━━━━━━━━━━";
 
@@ -146,7 +147,7 @@ class TelegramService
     {
         $waktu = now()->format('d/m/Y H:i');
         $harga = $barangMasuk->harga ? 'Rp ' . number_format($barangMasuk->harga, 0, ',', '.') : '-';
-        
+
         $pesan = "━━━━━━━━━━━━━━━━━━━━━\n"
             . "📥 <b>BARANG MASUK</b>\n"
             . "━━━━━━━━━━━━━━━━━━━━━\n\n"
@@ -168,7 +169,7 @@ class TelegramService
     public function notifBarangKeluar($barangKeluar): void
     {
         $waktu = now()->format('d/m/Y H:i');
-        
+
         $pesan = "━━━━━━━━━━━━━━━━━━━━━\n"
             . "📤 <b>BARANG KELUAR</b>\n"
             . "━━━━━━━━━━━━━━━━━━━━━\n\n"
@@ -190,7 +191,7 @@ class TelegramService
     public function notifUpdateStatusBarangRusak($barangRusak, string $oldStatus): void
     {
         $waktu = now()->format('d/m/Y H:i');
-        
+
         $statusLabels = [
             'dilaporkan' => '📋 Dilaporkan',
             'diproses' => '🔧 Sedang Diproses',
@@ -208,16 +209,23 @@ class TelegramService
             default => '📋',
         };
 
+        // Hitung sisa barang yang masih rusak (belum diperbaiki)
+        $sisaRusak = $barangRusak->barang->barangRusak()
+            ->whereIn('status', ['dilaporkan', 'diproses'])
+            ->sum('jumlah');
+
         $pesan = "━━━━━━━━━━━━━━━━━━━━━\n"
             . "{$emoji} <b>UPDATE STATUS PERBAIKAN</b>\n"
             . "━━━━━━━━━━━━━━━━━━━━━\n\n"
             . "🏷 <b>Detail Barang</b>\n"
             . "├ Nama: <code>{$barangRusak->barang->nama_barang}</code>\n"
             . "├ Kode: <code>{$barangRusak->barang->kode_barang}</code>\n"
+            . "├ Jumlah Diupdate: {$barangRusak->jumlah} unit\n"
             . "└ Kerusakan: {$barangRusak->jenis_kerusakan}\n\n"
             . "📊 <b>Perubahan Status</b>\n"
             . "├ Sebelum: {$oldStatusLabel}\n"
-            . "└ Sesudah: {$newStatusLabel}\n\n"
+            . "├ Sesudah: {$newStatusLabel}\n"
+            . "└ Sisa Rusak: {$sisaRusak} unit\n\n"
             . "📝 <b>Catatan</b>\n"
             . "└ " . ($barangRusak->catatan_status ?: '-') . "\n\n"
             . "🕐 <i>Diupdate: {$waktu}</i>\n"

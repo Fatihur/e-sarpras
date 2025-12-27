@@ -32,7 +32,7 @@ class Barang extends Model
     protected static function boot()
     {
         parent::boot();
-        
+
         static::creating(function ($model) {
             if (empty($model->kode_barang)) {
                 $model->kode_barang = self::generateKode();
@@ -81,7 +81,7 @@ class Barang extends Model
             ->size(200)
             ->errorCorrection('H')
             ->generate($this->kode_barang);
-        
+
         return base64_encode($qrCodeSvg);
     }
 
@@ -100,14 +100,48 @@ class Barang extends Model
         $lastBarang = self::where('kode_barang', 'like', "INV-{$tahun}{$bulan}-%")
             ->orderBy('kode_barang', 'desc')
             ->first();
-        
+
         if ($lastBarang) {
             $lastNumber = (int) substr($lastBarang->kode_barang, -4);
             $newNumber = $lastNumber + 1;
         } else {
             $newNumber = 1;
         }
-        
+
         return "INV-{$tahun}{$bulan}-" . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Hitung jumlah barang berdasarkan status kondisi (dinamis)
+     */
+    public function getStatusBreakdownAttribute(): array
+    {
+        $totalJumlah = $this->jumlah;
+
+        // Hitung jumlah yang dipinjam (status dipinjam)
+        // Note: peminjaman tidak memiliki field jumlah, jadi count records
+        $dipinjam = $this->peminjaman()
+            ->where('status', 'dipinjam')
+            ->count();
+
+        // Hitung jumlah yang rusak (belum diperbaiki - dilaporkan atau diproses)
+        $rusak = $this->barangRusak()
+            ->whereIn('status', ['dilaporkan', 'diproses'])
+            ->sum('jumlah');
+
+        // Jumlah tidak bisa diperbaiki (dianggap disposed/tidak bisa digunakan)
+        $tidakBisaDiperbaiki = $this->barangRusak()
+            ->where('status', 'tidak_bisa_diperbaiki')
+            ->sum('jumlah');
+
+        // Aktif = total - dipinjam - rusak - tidak bisa diperbaiki
+        $aktif = max(0, $totalJumlah - $dipinjam - $rusak - $tidakBisaDiperbaiki);
+
+        return [
+            'aktif' => $aktif,
+            'dipinjam' => $dipinjam,
+            'rusak' => $rusak,
+            'tidak_bisa_diperbaiki' => $tidakBisaDiperbaiki,
+        ];
     }
 }

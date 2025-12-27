@@ -16,6 +16,7 @@ class BarangRusak extends Model
         'tanggal_rusak',
         'jenis_kerusakan',
         'deskripsi_kerusakan',
+        'jumlah',
         'foto_bukti',
         'lokasi',
         'status',
@@ -27,6 +28,7 @@ class BarangRusak extends Model
     protected $casts = [
         'tanggal_rusak' => 'date',
         'tanggal_update_status' => 'datetime',
+        'jumlah' => 'integer',
     ];
 
     public static function getStatusOptions(): array

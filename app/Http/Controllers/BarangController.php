@@ -121,6 +121,7 @@ class BarangController extends Controller
         return response()->json([
             'svg' => base64_encode($svgData),
             'kode' => $barang->kode_barang,
+            'nama' => $barang->nama_barang,
         ]);
     }
 }

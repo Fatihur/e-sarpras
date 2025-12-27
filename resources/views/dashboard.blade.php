@@ -156,11 +156,11 @@
                     <a href="{{ route('scan.index') }}" class="btn btn-primary btn-lg">
                         <i class="bi bi-qr-code-scan me-2"></i>Scan QR Code
                     </a>
-                    <a href="{{ route('peminjaman.create') }}" class="btn btn-success btn-lg">
-                        <i class="bi bi-plus-circle me-2"></i>Peminjaman Baru
+                    <a href="{{ route('peminjaman.scan') }}" class="btn btn-success btn-lg">
+                        <i class="bi bi-plus-circle me-2"></i>Scan Peminjaman Baru
                     </a>
-                    <a href="{{ route('barang-rusak.create') }}" class="btn btn-danger btn-lg">
-                        <i class="bi bi-exclamation-triangle me-2"></i>Lapor Barang Rusak
+                    <a href="{{ route('barang-rusak.scan') }}" class="btn btn-danger btn-lg">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Scan Lapor Barang Rusak
                     </a>
                 </div>
             </div>

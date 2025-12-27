@@ -28,10 +28,20 @@ class PeminjamanController extends Controller
         return view('peminjaman.index', compact('peminjaman'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $barang = Barang::where('status_barang', 'aktif')->where('jumlah', '>', 0)->get();
-        return view('peminjaman.create', compact('barang'));
+        // Tampilkan barang yang memiliki stok aktif berdasarkan breakdown dinamis
+        $barang = Barang::where('jumlah', '>', 0)->get()->filter(function ($item) {
+            return $item->status_breakdown['aktif'] > 0;
+        });
+
+        // Jika ada barang_id dari scan, pre-select barang tersebut
+        $selectedBarang = null;
+        if ($request->filled('barang_id')) {
+            $selectedBarang = Barang::find($request->barang_id);
+        }
+
+        return view('peminjaman.create', compact('barang', 'selectedBarang'));
     }
 
     public function store(Request $request)
@@ -99,15 +109,19 @@ class PeminjamanController extends Controller
     public function scanProcess(Request $request)
     {
         $barang = Barang::where('kode_barang', $request->kode)->first();
-        
+
         if (!$barang) {
             return response()->json(['success' => false, 'message' => 'Barang tidak ditemukan.']);
         }
 
+        // Ambil breakdown dinamis
+        $breakdown = $barang->status_breakdown;
+
         return response()->json([
             'success' => true,
             'barang' => $barang,
-            'status' => $barang->status_barang,
+            'breakdown' => $breakdown,
+            'tersedia' => $breakdown['aktif'] > 0,
         ]);
     }
 }
