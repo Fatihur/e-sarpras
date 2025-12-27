@@ -16,6 +16,7 @@
                             <th>Kode</th>
                             <th>Nama Lahan</th>
                             <th>Lokasi</th>
+                            <th>Luas (m²)</th>
                             @if(auth()->user()->isAdmin())
                                 <th width="120">Aksi</th>
                             @endif
@@ -27,6 +28,7 @@
                                 <td><code>{{ $item->kode_lahan }}</code></td>
                                 <td>{{ $item->nama_lahan }}</td>
                                 <td>{{ $item->lokasi_lahan ?? '-' }}</td>
+                                <td>{{ $item->luas_bangunan ? number_format($item->luas_bangunan, 2, ',', '.') : '-' }}</td>
                                 @if(auth()->user()->isAdmin())
                                     <td>
                                         <a href="{{ route('lahan.edit', $item) }}" class="btn btn-sm btn-warning"><i

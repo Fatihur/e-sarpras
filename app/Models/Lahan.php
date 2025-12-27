@@ -14,12 +14,13 @@ class Lahan extends Model
         'kode_lahan',
         'nama_lahan',
         'lokasi_lahan',
+        'luas_bangunan',
     ];
 
     protected static function boot()
     {
         parent::boot();
-        
+
         static::creating(function ($model) {
             if (empty($model->kode_lahan)) {
                 $model->kode_lahan = self::generateKode();

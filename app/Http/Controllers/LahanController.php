@@ -23,6 +23,7 @@ class LahanController extends Controller
         $validated = $request->validate([
             'nama_lahan' => 'required|string|max:255',
             'lokasi_lahan' => 'nullable|string',
+            'luas_bangunan' => 'nullable|numeric|min:0',
         ]);
 
         // Kode lahan akan di-generate otomatis di model
@@ -42,6 +43,7 @@ class LahanController extends Controller
             'kode_lahan' => 'required|unique:lahan,kode_lahan,' . $lahan->id,
             'nama_lahan' => 'required|string|max:255',
             'lokasi_lahan' => 'nullable|string',
+            'luas_bangunan' => 'nullable|numeric|min:0',
         ]);
 
         $lahan->update($validated);
