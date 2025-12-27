@@ -18,7 +18,8 @@
     <div class="card-header">Daftar Barang</div>
     <div class="card-body p-0">
         <table class="table table-hover mb-0">
-            <thead><tr><th>Kode</th><th>Nama Barang</th><th>Jumlah</th><th>Keterangan</th>@if(auth()->user()->isAdmin())<th width="80">Aksi</th>@endif</tr></thead>
+            <thead><tr><th>Kode</th><th>Nama Barang</th><th>Jumlah</th><th>Keterangan</th>@if(auth()->user()->isAdminOrManajemen())
+<th width="80">Aksi</th>@endif</tr></thead>
             <tbody>
                 @forelse($ruangan->barang as $b)
                 <tr>
@@ -26,7 +27,7 @@
                     <td>{{ $b->nama_barang }}</td>
                     <td>{{ $b->pivot->jumlah }}</td>
                     <td>{{ $b->pivot->keterangan ?? '-' }}</td>
-                    @if(auth()->user()->isAdmin())
+                    @if(auth()->user()->isAdminOrManajemen())
                     <td>
                         @if($b->pivot->id)
                         <form action="{{ route('barang-ruangan.destroy', $b->pivot->id) }}" method="POST" onsubmit="return confirm('Hapus dari ruangan?')">

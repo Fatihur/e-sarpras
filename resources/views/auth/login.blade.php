@@ -4,231 +4,183 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - e-Sarpras</title>
+
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
     <style>
         :root {
-            --primary-color: #78C841;
-            --secondary-color: #5fb030;
+            --primary: #78C841;
             --primary-dark: #4a9928;
         }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        html, body {
-            height: 100%;
-        }
-        body {
-            min-height: 100vh;
-            min-height: 100dvh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: url("/images/bg-login.jpg") no-repeat center center fixed;
-            background-size: cover;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            padding: 1rem;
-            position: relative;
-        }
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(45, 80, 22, 0.7);
-            z-index: 0;
-        }
+
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+    background:
+        linear-gradient(
+            rgba(0,0,0,0.35),
+            rgba(0,0,0,0.35)
+        ),
+        url("/images/bg-login.jpg") center / cover no-repeat fixed;
+}
+
+
+        /* Container */
         .login-container {
-            position: relative;
-            z-index: 1;
             width: 100%;
-            max-width: 420px;
+            max-width: 380px;
         }
-        .login-logo {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            margin: 0 auto 1rem;
-            display: block;
-        }
+
+        /* Glass Card */
         .login-card {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
-            overflow: hidden;
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+            padding: 2rem 1.75rem;
+            color: #fff;
         }
+
+        /* Header */
         .login-header {
-            background: #fff;
-            color: #333;
-            padding: 2rem 1.5rem;
             text-align: center;
-            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 1.5rem;
         }
+
+        .login-header img {
+            width: 56px;
+            margin-bottom: 0.5rem;
+        }
+
         .login-header h4 {
             font-weight: 700;
             margin-bottom: 0.25rem;
-            color: #78C841;
         }
+
         .login-header small {
-            color: #64748b;
+            opacity: 0.85;
         }
-        .login-body {
-            padding: 2rem 1.5rem;
-        }
+
+        /* Form */
         .form-label {
-            font-weight: 500;
-            color: #374151;
-            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            opacity: 0.9;
         }
+
         .input-group-text {
-            background: #f8fafc;
-            border-color: #e2e8f0;
-            color: #64748b;
-        }
-        .form-control {
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            border-color: #e2e8f0;
-            font-size: 1rem;
-        }
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(120,200,65,0.25);
-        }
-        .input-group .form-control {
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-        }
-        .input-group .input-group-text {
-            border-top-left-radius: 8px;
-            border-bottom-left-radius: 8px;
-        }
-        .btn-login {
-            background: #78C841;
+            background: rgba(255,255,255,0.85);
             border: none;
-            padding: 0.875rem;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.2s;
         }
-        .btn-login:hover {
-            background: #4a9928;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(120,200,65,0.4);
+
+        .form-control {
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.9);
         }
-        .btn-login:active {
-            transform: translateY(0);
+
+        .form-control:focus {
+            box-shadow: 0 0 0 4px rgba(6, 197, 207, 0.32);
         }
-        .alert {
-            border-radius: 8px;
-            font-size: 0.875rem;
-        }
-        .password-toggle {
-            cursor: pointer;
-            background: #f8fafc;
-            border-color: #e2e8f0;
-            border-left: none;
-        }
-        .password-toggle:hover {
-            background: #f1f5f9;
-        }
+
+        .btn-login {
+    background: linear-gradient(135deg, #0d9488, #0f766e);
+    border: none;
+    border-radius: 14px;
+    padding: 0.85rem;
+    font-weight: 600;
+    color: #fff;              /* ⬅️ INI PENTING */
+    transition: all 0.25s ease;
+}
+
+.btn-login:hover {
+    color: #fff;              /* ⬅️ biar hover tetap putih */
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(13,148,136,0.45);
+}
+
+
+        /* Footer */
         .login-footer {
             text-align: center;
-            padding: 1rem 1.5rem 1.5rem;
-            color: #64748b;
-            font-size: 0.875rem;
-        }
-        @media (max-width: 480px) {
-            body {
-                padding: 0.75rem;
-                align-items: flex-start;
-                padding-top: 2rem;
-            }
-            .login-header {
-                padding: 1.5rem 1rem;
-            }
-            .login-logo {
-                width: 60px;
-                height: 60px;
-            }
-            .login-body {
-                padding: 1.5rem 1rem;
-            }
-            .form-control {
-                font-size: 16px; /* Prevents zoom on iOS */
-            }
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 1.25rem;
         }
     </style>
 </head>
+
 <body>
-    <div class="login-container">
-        <div class="login-card">
-            <div class="login-header">
-                <img src="{{ asset('mq.png') }}" alt="Logo" class="login-logo">
-                <h4>e-Sarpras</h4>
-                <small>Sistem Sarana & Prasarana Pesantren</small>
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <img src="{{ asset('mq.png') }}" alt="Logo">
+            <h4>e-Sarpras</h4>
+            <small>Sistem Sarana & Prasarana Pesantren</small>
+        </div>
+
+        @if($errors->any())
+            <div class="alert alert-danger py-2 small">
+                {{ $errors->first() }}
             </div>
-            <div class="login-body">
-                @if($errors->any())
-                <div class="alert alert-danger py-2 mb-3">
-                    <i class="bi bi-exclamation-circle me-1"></i>{{ $errors->first() }}
+        @endif
+
+        <form method="POST" action="{{ route('login.post') }}">
+            @csrf
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                    <input type="email" name="email" class="form-control"
+                           value="{{ old('email') }}" required autofocus>
                 </div>
-                @endif
-                @if(session('success'))
-                <div class="alert alert-success py-2 mb-3">
-                    <i class="bi bi-check-circle me-1"></i>{{ session('success') }}
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Password</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                    <input type="password" name="password" id="password" class="form-control" required>
+                    <span class="input-group-text" onclick="togglePassword()" style="cursor:pointer">
+                        <i class="bi bi-eye" id="toggleIcon"></i>
+                    </span>
                 </div>
-                @endif
-                <form method="POST" action="{{ route('login.post') }}">
-                    @csrf
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                            <input type="email" name="email" class="form-control" placeholder="Masukkan email" value="{{ old('email') }}" required autofocus>
-                        </div>
-                    </div>
-                    <div class="mb-4">
-                        <label class="form-label">Password</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                            <input type="password" name="password" id="password" class="form-control" placeholder="Masukkan password" required>
-                            <span class="input-group-text password-toggle" onclick="togglePassword()">
-                                <i class="bi bi-eye" id="toggleIcon"></i>
-                            </span>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-login w-100">
-                        <i class="bi bi-box-arrow-in-right me-2"></i>Masuk
-                    </button>
-                </form>
             </div>
-            <div class="login-footer">
-                &copy; {{ date('Y') }} e-Sarpras
-            </div>
+
+            <button class="btn btn-login w-100">
+                <i class="bi bi-box-arrow-in-right me-2"></i> Masuk
+            </button>
+        </form>
+
+        <div class="login-footer">
+            © {{ date('Y') }} e-Sarpras
         </div>
     </div>
+</div>
 
-    <script>
-        function togglePassword() {
-            const password = document.getElementById('password');
-            const icon = document.getElementById('toggleIcon');
-            if (password.type === 'password') {
-                password.type = 'text';
-                icon.classList.remove('bi-eye');
-                icon.classList.add('bi-eye-slash');
-            } else {
-                password.type = 'password';
-                icon.classList.remove('bi-eye-slash');
-                icon.classList.add('bi-eye');
-            }
+<script>
+    function togglePassword() {
+        const input = document.getElementById('password');
+        const icon = document.getElementById('toggleIcon');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.replace('bi-eye', 'bi-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.replace('bi-eye-slash', 'bi-eye');
         }
-    </script>
+    }
+</script>
 </body>
 </html>

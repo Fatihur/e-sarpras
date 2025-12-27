@@ -25,10 +25,16 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Protected Routes
 Route::middleware('auth')->group(function () {
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Admin Only Routes
+    /*
+    |--------------------------------------------------------------------------
+    | ADMIN ONLY
+    |--------------------------------------------------------------------------
+    */
     Route::middleware('role:admin')->group(function () {
+
         // Master Data
         Route::resource('kategori', KategoriController::class)->except('show');
         Route::resource('lahan', LahanController::class)->except('show');
@@ -42,23 +48,29 @@ Route::middleware('auth')->group(function () {
         Route::post('users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
         Route::post('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
 
-        // Barang Ruangan Management
-        Route::get('barang-ruangan/create', [BarangRuanganController::class, 'create'])->name('barang-ruangan.create');
-        Route::post('barang-ruangan', [BarangRuanganController::class, 'store'])->name('barang-ruangan.store');
-        Route::delete('barang-ruangan/{barangRuangan}', [BarangRuanganController::class, 'destroy'])->name('barang-ruangan.destroy');
-
         // Telegram
         Route::get('telegram', [TelegramController::class, 'index'])->name('telegram.index');
         Route::post('telegram', [TelegramController::class, 'update'])->name('telegram.update');
         Route::post('telegram/test', [TelegramController::class, 'testNotifikasi'])->name('telegram.test');
     });
 
-    // Admin & Manajemen Routes
+    /*
+    |--------------------------------------------------------------------------
+    | ADMIN & MANAJEMEN
+    |--------------------------------------------------------------------------
+    */
     Route::middleware('role:admin,manajemen')->group(function () {
+
+        // Barang Ruangan (CRUD)
+        Route::get('barang-ruangan/create', [BarangRuanganController::class, 'create'])->name('barang-ruangan.create');
+        Route::post('barang-ruangan', [BarangRuanganController::class, 'store'])->name('barang-ruangan.store');
+        Route::delete('barang-ruangan/{barangRuangan}', [BarangRuanganController::class, 'destroy'])->name('barang-ruangan.destroy');
+
         // Barang Masuk & Keluar
         Route::resource('barang-masuk', BarangMasukController::class)->except(['show', 'edit', 'update']);
         Route::get('barang-masuk/scan', [BarangMasukController::class, 'scan'])->name('barang-masuk.scan');
         Route::post('barang-masuk/scan', [BarangMasukController::class, 'scanStore'])->name('barang-masuk.scan.store');
+
         Route::resource('barang-keluar', BarangKeluarController::class)->except(['show', 'edit', 'update']);
 
         // Peminjaman
@@ -79,17 +91,29 @@ Route::middleware('auth')->group(function () {
         Route::post('scan', [ScanController::class, 'process'])->name('scan.process');
     });
 
-    // View Barang Ruangan (All roles)
+    /*
+    |--------------------------------------------------------------------------
+    | VIEW BARANG RUANGAN (ALL ROLES)
+    |--------------------------------------------------------------------------
+    */
     Route::get('barang-ruangan', [BarangRuanganController::class, 'index'])->name('barang-ruangan.index');
     Route::get('barang-ruangan/{ruangan}', [BarangRuanganController::class, 'show'])->name('barang-ruangan.show');
 
-    // Laporan (Admin & Pimpinan)
-    Route::middleware('role:admin,pimpinan')->prefix('laporan')->name('laporan.')->group(function () {
-        Route::get('/', [LaporanController::class, 'index'])->name('index');
-        Route::get('/barang-masuk', [LaporanController::class, 'barangMasuk'])->name('barang-masuk');
-        Route::get('/barang-keluar', [LaporanController::class, 'barangKeluar'])->name('barang-keluar');
-        Route::get('/peminjaman', [LaporanController::class, 'peminjaman'])->name('peminjaman');
-        Route::get('/barang-rusak', [LaporanController::class, 'barangRusak'])->name('barang-rusak');
-        Route::get('/barang-ruangan', [LaporanController::class, 'barangRuangan'])->name('barang-ruangan');
-    });
+    /*
+    |--------------------------------------------------------------------------
+    | LAPORAN
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware('role:admin,manajemen,pimpinan')
+        ->prefix('laporan')
+        ->name('laporan.')
+        ->group(function () {
+
+            Route::get('/', [LaporanController::class, 'index'])->name('index');
+            Route::get('/barang-masuk', [LaporanController::class, 'barangMasuk'])->name('barang-masuk');
+            Route::get('/barang-keluar', [LaporanController::class, 'barangKeluar'])->name('barang-keluar');
+            Route::get('/peminjaman', [LaporanController::class, 'peminjaman'])->name('peminjaman');
+            Route::get('/barang-rusak', [LaporanController::class, 'barangRusak'])->name('barang-rusak');
+            Route::get('/barang-ruangan', [LaporanController::class, 'barangRuangan'])->name('barang-ruangan');
+        });
 });

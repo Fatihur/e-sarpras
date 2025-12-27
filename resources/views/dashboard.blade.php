@@ -3,60 +3,93 @@
 @section('content')
 <h4 class="mb-4">Dashboard</h4>
 
-<div class="row g-3 g-md-4 mb-4">
-    <div class="col-6 col-md-6 col-xl-3">
-        <div class="stat-card primary position-relative">
-            <i class="bi bi-box stat-icon"></i>
-            <div class="stat-value">{{ number_format($data['totalBarang']) }}</div>
-            <div class="stat-label">Total Barang</div>
+<div class="row g-4 mb-4">
+    <div class="col-lg-3 col-md-6">
+        <div class="dashboard-stat">
+            <div class="icon-box icon-green">
+                <i class="bi bi-box"></i>
+            </div>
+            <div>
+                <h3>{{ $data['totalBarang'] }}</h3>
+                <p>Total Barang</p>
+            </div>
         </div>
     </div>
-    <div class="col-6 col-md-6 col-xl-3">
-        <div class="stat-card danger position-relative">
-            <i class="bi bi-exclamation-triangle stat-icon"></i>
-            <div class="stat-value">{{ number_format($data['totalBarangRusak']) }}</div>
-            <div class="stat-label">Barang Rusak</div>
+
+    <div class="col-lg-3 col-md-6">
+        <div class="dashboard-stat">
+            <div class="icon-box icon-red">
+                <i class="bi bi-exclamation-triangle"></i>
+            </div>
+            <div>
+                <h3>{{ $data['totalBarangRusak'] }}</h3>
+                <p>Barang Rusak</p>
+            </div>
         </div>
     </div>
-    <div class="col-6 col-md-6 col-xl-3">
-        <div class="stat-card success position-relative">
-            <i class="bi bi-box-arrow-in-down stat-icon"></i>
-            <div class="stat-value">{{ number_format($data['totalBarangMasuk']) }}</div>
-            <div class="stat-label">Barang Masuk</div>
+
+    <div class="col-lg-3 col-md-6">
+        <div class="dashboard-stat">
+            <div class="icon-box icon-teal">
+                <i class="bi bi-box-arrow-in-down"></i>
+            </div>
+            <div>
+                <h3>{{ $data['totalBarangMasuk'] }}</h3>
+                <p>Barang Masuk</p>
+            </div>
         </div>
     </div>
-    <div class="col-6 col-md-6 col-xl-3">
-        <div class="stat-card warning position-relative">
-            <i class="bi bi-box-arrow-up stat-icon"></i>
-            <div class="stat-value">{{ number_format($data['totalBarangKeluar']) }}</div>
-            <div class="stat-label">Barang Keluar</div>
+
+    <div class="col-lg-3 col-md-6">
+        <div class="dashboard-stat">
+            <div class="icon-box icon-yellow">
+                <i class="bi bi-box-arrow-up"></i>
+            </div>
+            <div>
+                <h3>{{ $data['totalBarangKeluar'] }}</h3>
+                <p>Barang Keluar</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row g-4 mb-4">
+    <div class="col-lg-4 col-md-6">
+        <div class="dashboard-stat">
+            <div class="icon-box icon-blue">
+                <i class="bi bi-arrow-left-right"></i>
+            </div>
+            <div>
+                <h3>{{ $data['totalPeminjamanAktif'] }}</h3>
+                <p>Peminjaman Aktif</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-md-6">
+        <div class="dashboard-stat">
+            <div class="icon-box icon-green">
+                <i class="bi bi-check-circle"></i>
+            </div>
+            <div>
+                <h3>{{ $data['totalPeminjamanSelesai'] }}</h3>
+                <p>Peminjaman Selesai</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-md-6">
+        <div class="dashboard-stat">
+            <div class="icon-box icon-teal">
+                <i class="bi bi-door-open"></i>
+            </div>
+            <div>
+                <h3>{{ $data['totalBarangRuangan'] }}</h3>
+                <p>Barang di Ruangan</p>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="row g-3 g-md-4 mb-4">
-    <div class="col-6 col-md-6 col-xl-4">
-        <div class="stat-card info position-relative">
-            <i class="bi bi-arrow-left-right stat-icon"></i>
-            <div class="stat-value">{{ number_format($data['totalPeminjamanAktif']) }}</div>
-            <div class="stat-label">Peminjaman Aktif</div>
-        </div>
-    </div>
-    <div class="col-6 col-md-6 col-xl-4">
-        <div class="stat-card success position-relative">
-            <i class="bi bi-check-circle stat-icon"></i>
-            <div class="stat-value">{{ number_format($data['totalPeminjamanSelesai']) }}</div>
-            <div class="stat-label">Peminjaman Selesai</div>
-        </div>
-    </div>
-    <div class="col-12 col-md-6 col-xl-4">
-        <div class="stat-card primary position-relative">
-            <i class="bi bi-door-open stat-icon"></i>
-            <div class="stat-value">{{ number_format($data['totalBarangRuangan']) }}</div>
-            <div class="stat-label">Barang di Ruangan</div>
-        </div>
-    </div>
-</div>
 
 @if($user->isAdmin() || $user->isManajemen())
 <div class="row g-4">

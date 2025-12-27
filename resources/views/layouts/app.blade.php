@@ -6,14 +6,117 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'e-Sarpras')</title>
     <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet">
     <style>
+                .dashboard-stat {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 1.25rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            height: 100%;
+        }
+
+        .dashboard-stat .icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .icon-green { background: #16a34a; }
+        .icon-red { background: #dc2626; }
+        .icon-blue { background: #2563eb; }
+        .icon-yellow { background: #ca8a04; }
+        .icon-teal { background: #0d9488; }
+
+        .dashboard-stat h3 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 1.6rem;
+        }
+
+        .dashboard-stat p {
+            margin: 0;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+                /* Hover animation for dashboard stat */
+        .dashboard-stat {
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+
+        .dashboard-stat:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+        }
+
+        /* Icon subtle shake / bounce */
+        .dashboard-stat .icon-box {
+            transition: transform 0.25s ease;
+        }
+
+        .dashboard-stat:hover .icon-box {
+            transform: rotate(-5deg) scale(1.08);
+        }
+                @keyframes icon-wiggle {
+            0%   { transform: rotate(0deg); }
+            25%  { transform: rotate(-6deg); }
+            50%  { transform: rotate(6deg); }
+            75%  { transform: rotate(-3deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        .dashboard-stat:hover .icon-box {
+            animation: icon-wiggle 0.4s ease-in-out;
+        }
+        /* Desktop hover only */
+@media (hover: hover) and (pointer: fine) {
+    .dashboard-stat {
+        transition: all 0.25s ease;
+        cursor: pointer;
+    }
+
+    .dashboard-stat:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+    }
+
+    .dashboard-stat:hover .icon-box {
+        animation: icon-wiggle 0.4s ease-in-out;
+    }
+}
+
+/* Mobile tap feedback */
+.dashboard-stat:active {
+    transform: scale(0.97);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
         :root { --sidebar-width: 260px; --primary-color: #78C841; --secondary-color: #5fb030; --primary-dark: #4a9928; }
         html { height: 100%; height: -webkit-fill-available; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f4f9f2; overflow-x: hidden; min-height: 100%; min-height: 100dvh; }
+       body {
+    font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f4f9f2;
+    overflow-x: hidden;
+    min-height: 100%;
+    min-height: 100dvh;
+}
+
         .sidebar { width: var(--sidebar-width); height: 100vh; height: 100dvh; position: fixed; left: 0; top: 0; bottom: 0; background: #0d9488; z-index: 1050; transition: transform 0.3s ease; display: flex; flex-direction: column; }
         .sidebar-header { padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
         .sidebar-header h4 { color: #fff; font-weight: 700; margin: 0; font-size: 1.25rem; }
@@ -177,7 +280,7 @@
                 <i class="bi bi-list-check"></i> Barang Ruangan
             </a>
 
-            @if(auth()->user()->isAdmin() || auth()->user()->isPimpinan())
+            @if(auth()->user()->isAdmin() || auth()->user()->isManajemen() || auth()->user()->isPimpinan())
             <div class="nav-section">Laporan</div>
             <a href="{{ route('laporan.index') }}" class="nav-link {{ request()->routeIs('laporan.*') ? 'active' : '' }}">
                 <i class="bi bi-file-earmark-bar-graph"></i> Laporan

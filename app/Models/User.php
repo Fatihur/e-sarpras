@@ -46,4 +46,8 @@ class User extends Authenticatable
     {
         return $this->role === 'pimpinan';
     }
+        public function isAdminOrManajemen()
+    {
+        return in_array($this->role, ['admin', 'manajemen']);
+    }
 }
