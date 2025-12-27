@@ -233,4 +233,67 @@ class TelegramService
 
         $this->kirimNotifikasi('barang_rusak', $pesan);
     }
+
+    /**
+     * Kirim file laporan ke grup Telegram
+     */
+    public function kirimLaporan(string $filePath, string $caption, string $tipeFile = 'pdf'): bool
+    {
+        if (!$this->pengaturan || !$this->pengaturan->bot_token || !$this->pengaturan->group_id) {
+            return false;
+        }
+
+        try {
+            $url = "https://api.telegram.org/bot{$this->pengaturan->bot_token}/sendDocument";
+
+            $response = Http::attach(
+                'document',
+                file_get_contents($filePath),
+                basename($filePath)
+            )->post($url, [
+                        'chat_id' => $this->pengaturan->group_id,
+                        'caption' => $caption,
+                        'parse_mode' => 'HTML',
+                    ]);
+
+            $status = $response->successful() ? 'terkirim' : 'gagal';
+
+            LogNotifikasi::create([
+                'tipe_notifikasi' => 'laporan_' . $tipeFile,
+                'pesan' => $caption,
+                'status' => $status,
+                'response' => $response->body(),
+                'waktu_kirim' => now(),
+            ]);
+
+            return $response->successful();
+        } catch (\Exception $e) {
+            LogNotifikasi::create([
+                'tipe_notifikasi' => 'laporan_' . $tipeFile,
+                'pesan' => $caption,
+                'status' => 'gagal',
+                'response' => $e->getMessage(),
+                'waktu_kirim' => now(),
+            ]);
+            return false;
+        }
+    }
+
+    /**
+     * Notifikasi laporan diekspor
+     */
+    public function notifLaporanExport(string $namaLaporan, string $tipeFile, string $userName): string
+    {
+        $waktu = now()->format('d/m/Y H:i');
+
+        return "━━━━━━━━━━━━━━━━━━━━━\n"
+            . "📊 <b>LAPORAN DIEKSPOR</b>\n"
+            . "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            . "📄 <b>Detail Laporan</b>\n"
+            . "├ Nama: <code>{$namaLaporan}</code>\n"
+            . "├ Format: " . strtoupper($tipeFile) . "\n"
+            . "└ Diekspor oleh: {$userName}\n\n"
+            . "🕐 <i>Waktu: {$waktu}</i>\n"
+            . "━━━━━━━━━━━━━━━━━━━━━";
+    }
 }

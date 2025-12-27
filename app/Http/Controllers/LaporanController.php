@@ -10,6 +10,7 @@ use App\Models\BarangRusak;
 use App\Models\Kategori;
 use App\Models\Peminjaman;
 use App\Models\Ruangan;
+use App\Services\TelegramService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -17,9 +18,26 @@ use App\Exports\LaporanExport;
 
 class LaporanController extends Controller
 {
+    protected TelegramService $telegramService;
+
+    public function __construct(TelegramService $telegramService)
+    {
+        $this->telegramService = $telegramService;
+    }
+
     public function index()
     {
         return view('laporan.index');
+    }
+
+    /**
+     * Helper untuk mengirim file ke Telegram
+     */
+    protected function kirimKeTelegram(string $filePath, string $namaLaporan, string $tipeFile): void
+    {
+        $userName = auth()->user()->nama ?? 'System';
+        $caption = $this->telegramService->notifLaporanExport($namaLaporan, $tipeFile, $userName);
+        $this->telegramService->kirimLaporan($filePath, $caption, $tipeFile);
     }
 
     public function barangMasuk(Request $request)
@@ -37,11 +55,26 @@ class LaporanController extends Controller
 
         if ($request->export === 'pdf') {
             $pdf = Pdf::loadView('laporan.pdf.barang-masuk', compact('data'));
-            return $pdf->download('laporan-barang-masuk.pdf');
+            $fileName = 'laporan-barang-masuk-' . now()->format('Y-m-d-His') . '.pdf';
+            $filePath = storage_path('app/public/' . $fileName);
+            $pdf->save($filePath);
+
+            // Kirim ke Telegram
+            $this->kirimKeTelegram($filePath, 'Laporan Barang Masuk', 'pdf');
+
+            return response()->download($filePath)->deleteFileAfterSend(true);
         }
 
         if ($request->export === 'excel') {
-            return Excel::download(new LaporanExport($data, 'barang_masuk'), 'laporan-barang-masuk.xlsx');
+            $fileName = 'laporan-barang-masuk-' . now()->format('Y-m-d-His') . '.xlsx';
+            $filePath = storage_path('app/public/' . $fileName);
+            $excelContent = Excel::raw(new LaporanExport($data, 'barang_masuk'), \Maatwebsite\Excel\Excel::XLSX);
+            file_put_contents($filePath, $excelContent);
+
+            // Kirim ke Telegram
+            $this->kirimKeTelegram($filePath, 'Laporan Barang Masuk', 'excel');
+
+            return response()->download($filePath)->deleteFileAfterSend(true);
         }
 
         return view('laporan.barang-masuk', compact('data'));
@@ -62,11 +95,26 @@ class LaporanController extends Controller
 
         if ($request->export === 'pdf') {
             $pdf = Pdf::loadView('laporan.pdf.barang-keluar', compact('data'));
-            return $pdf->download('laporan-barang-keluar.pdf');
+            $fileName = 'laporan-barang-keluar-' . now()->format('Y-m-d-His') . '.pdf';
+            $filePath = storage_path('app/public/' . $fileName);
+            $pdf->save($filePath);
+
+            // Kirim ke Telegram
+            $this->kirimKeTelegram($filePath, 'Laporan Barang Keluar', 'pdf');
+
+            return response()->download($filePath)->deleteFileAfterSend(true);
         }
 
         if ($request->export === 'excel') {
-            return Excel::download(new LaporanExport($data, 'barang_keluar'), 'laporan-barang-keluar.xlsx');
+            $fileName = 'laporan-barang-keluar-' . now()->format('Y-m-d-His') . '.xlsx';
+            $filePath = storage_path('app/public/' . $fileName);
+            $excelContent = Excel::raw(new LaporanExport($data, 'barang_keluar'), \Maatwebsite\Excel\Excel::XLSX);
+            file_put_contents($filePath, $excelContent);
+
+            // Kirim ke Telegram
+            $this->kirimKeTelegram($filePath, 'Laporan Barang Keluar', 'excel');
+
+            return response()->download($filePath)->deleteFileAfterSend(true);
         }
 
         return view('laporan.barang-keluar', compact('data'));
@@ -90,11 +138,26 @@ class LaporanController extends Controller
 
         if ($request->export === 'pdf') {
             $pdf = Pdf::loadView('laporan.pdf.peminjaman', compact('data'));
-            return $pdf->download('laporan-peminjaman.pdf');
+            $fileName = 'laporan-peminjaman-' . now()->format('Y-m-d-His') . '.pdf';
+            $filePath = storage_path('app/public/' . $fileName);
+            $pdf->save($filePath);
+
+            // Kirim ke Telegram
+            $this->kirimKeTelegram($filePath, 'Laporan Peminjaman', 'pdf');
+
+            return response()->download($filePath)->deleteFileAfterSend(true);
         }
 
         if ($request->export === 'excel') {
-            return Excel::download(new LaporanExport($data, 'peminjaman'), 'laporan-peminjaman.xlsx');
+            $fileName = 'laporan-peminjaman-' . now()->format('Y-m-d-His') . '.xlsx';
+            $filePath = storage_path('app/public/' . $fileName);
+            $excelContent = Excel::raw(new LaporanExport($data, 'peminjaman'), \Maatwebsite\Excel\Excel::XLSX);
+            file_put_contents($filePath, $excelContent);
+
+            // Kirim ke Telegram
+            $this->kirimKeTelegram($filePath, 'Laporan Peminjaman', 'excel');
+
+            return response()->download($filePath)->deleteFileAfterSend(true);
         }
 
         return view('laporan.peminjaman', compact('data'));
@@ -118,11 +181,26 @@ class LaporanController extends Controller
 
         if ($request->export === 'pdf') {
             $pdf = Pdf::loadView('laporan.pdf.barang-rusak', compact('data'));
-            return $pdf->download('laporan-barang-rusak.pdf');
+            $fileName = 'laporan-barang-rusak-' . now()->format('Y-m-d-His') . '.pdf';
+            $filePath = storage_path('app/public/' . $fileName);
+            $pdf->save($filePath);
+
+            // Kirim ke Telegram
+            $this->kirimKeTelegram($filePath, 'Laporan Barang Rusak', 'pdf');
+
+            return response()->download($filePath)->deleteFileAfterSend(true);
         }
 
         if ($request->export === 'excel') {
-            return Excel::download(new LaporanExport($data, 'barang_rusak'), 'laporan-barang-rusak.xlsx');
+            $fileName = 'laporan-barang-rusak-' . now()->format('Y-m-d-His') . '.xlsx';
+            $filePath = storage_path('app/public/' . $fileName);
+            $excelContent = Excel::raw(new LaporanExport($data, 'barang_rusak'), \Maatwebsite\Excel\Excel::XLSX);
+            file_put_contents($filePath, $excelContent);
+
+            // Kirim ke Telegram
+            $this->kirimKeTelegram($filePath, 'Laporan Barang Rusak', 'excel');
+
+            return response()->download($filePath)->deleteFileAfterSend(true);
         }
 
         return view('laporan.barang-rusak', compact('data'));
@@ -141,13 +219,29 @@ class LaporanController extends Controller
 
         if ($request->export === 'pdf') {
             $pdf = Pdf::loadView('laporan.pdf.barang-ruangan', compact('data'));
-            return $pdf->download('laporan-barang-ruangan.pdf');
+            $fileName = 'laporan-barang-ruangan-' . now()->format('Y-m-d-His') . '.pdf';
+            $filePath = storage_path('app/public/' . $fileName);
+            $pdf->save($filePath);
+
+            // Kirim ke Telegram
+            $this->kirimKeTelegram($filePath, 'Laporan Barang Per Ruangan', 'pdf');
+
+            return response()->download($filePath)->deleteFileAfterSend(true);
         }
 
         if ($request->export === 'excel') {
-            return Excel::download(new LaporanExport($data, 'barang_ruangan'), 'laporan-barang-ruangan.xlsx');
+            $fileName = 'laporan-barang-ruangan-' . now()->format('Y-m-d-His') . '.xlsx';
+            $filePath = storage_path('app/public/' . $fileName);
+            $excelContent = Excel::raw(new LaporanExport($data, 'barang_ruangan'), \Maatwebsite\Excel\Excel::XLSX);
+            file_put_contents($filePath, $excelContent);
+
+            // Kirim ke Telegram
+            $this->kirimKeTelegram($filePath, 'Laporan Barang Per Ruangan', 'excel');
+
+            return response()->download($filePath)->deleteFileAfterSend(true);
         }
 
         return view('laporan.barang-ruangan', compact('data', 'ruangan'));
     }
 }
+
