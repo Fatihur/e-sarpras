@@ -44,13 +44,17 @@ Route::get('/run-migration-fix/{secret}', function ($secret) {
     }
 
     // Fix 2: Tambah kolom luas_bangunan ke lahan (jika belum ada)
-    if (!Schema::hasColumn('lahan', 'luas_bangunan')) {
-        Schema::table('lahan', function ($table) {
-            $table->decimal('luas_bangunan', 10, 2)->nullable()->after('luas');
-        });
-        $results[] = '✅ Kolom "luas_bangunan" berhasil ditambahkan ke tabel lahan';
-    } else {
-        $results[] = '⚠️ Kolom "luas_bangunan" sudah ada di tabel lahan';
+    try {
+        if (!Schema::hasColumn('lahan', 'luas_bangunan')) {
+            Schema::table('lahan', function ($table) {
+                $table->decimal('luas_bangunan', 10, 2)->nullable();
+            });
+            $results[] = '✅ Kolom "luas_bangunan" berhasil ditambahkan ke tabel lahan';
+        } else {
+            $results[] = '⚠️ Kolom "luas_bangunan" sudah ada di tabel lahan';
+        }
+    } catch (\Exception $e) {
+        $results[] = '⚠️ Tabel lahan: ' . $e->getMessage();
     }
 
     return '<h1>Migration Fix Results</h1><ul><li>' . implode('</li><li>', $results) . '</li></ul><br><strong>PENTING: Hapus route ini dari web.php setelah selesai!</strong>';
