@@ -44,7 +44,7 @@
         let html5QrCode;
         let scannerRunning = false;
 
-        const ruanganOptions = `@foreach($ruangan as $r)<option value="{{ $r->id }}">{{ $r->nama_ruangan }}</option>@endforeach`;
+        const ruanganOptions = `@foreach($ruangan as $r)<option value="{{ $r->id }}">{{ $r->nama_lengkap }}</option>@endforeach`;
 
         function initScanner() {
             html5QrCode = new Html5Qrcode("reader");
@@ -86,11 +86,11 @@
 
         function scanUlang() {
             document.getElementById('formArea').innerHTML = `
-            <div class="text-center text-muted py-4">
-                <i class="bi bi-qr-code display-1 mb-3 d-block opacity-25"></i>
-                <p>Scan QR Code atau masukkan kode barang</p>
-            </div>
-        `;
+                <div class="text-center text-muted py-4">
+                    <i class="bi bi-qr-code display-1 mb-3 d-block opacity-25"></i>
+                    <p>Scan QR Code atau masukkan kode barang</p>
+                </div>
+            `;
             if (!scannerRunning) {
                 initScanner();
             }
@@ -124,51 +124,51 @@
                     if (data.success) {
                         const b = data.barang;
                         document.getElementById('formArea').innerHTML = `
-                    <div class="alert alert-info mb-3">
-                        <i class="bi bi-check-circle me-2"></i><strong>${b.kode_barang}</strong> - ${b.nama_barang}
-                        <br><small class="text-muted">Stok Total: ${b.jumlah} unit</small>
-                    </div>
-                    <form id="formRusak">
-                        <input type="hidden" name="barang_id" value="${b.id}">
-                        <div class="mb-3">
-                            <label class="form-label">Lokasi</label>
-                            <select name="lokasi" class="form-select" onchange="toggleRuangan(this.value)">
-                                <option value="dalam_ruangan">Dalam Ruangan</option>
-                                <option value="luar_ruangan">Luar Ruangan</option>
-                            </select>
+                        <div class="alert alert-info mb-3">
+                            <i class="bi bi-check-circle me-2"></i><strong>${b.kode_barang}</strong> - ${b.nama_barang}
+                            <br><small class="text-muted">Stok Total: ${b.jumlah} unit</small>
                         </div>
-                        <div class="mb-3" id="ruanganField">
-                            <label class="form-label">Ruangan</label>
-                            <select name="ruangan_id" class="form-select">
-                                <option value="">Pilih Ruangan</option>
-                                ${ruanganOptions}
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Jumlah Rusak <span class="text-danger">*</span></label>
-                            <input type="number" name="jumlah" class="form-control" value="1" min="1" required>
-                            <small class="text-muted">Jumlah unit yang rusak</small>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Jenis Kerusakan <span class="text-danger">*</span></label>
-                            <input type="text" name="jenis_kerusakan" class="form-control" required autofocus>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Deskripsi</label>
-                            <textarea name="deskripsi_kerusakan" class="form-control" rows="2"></textarea>
-                        </div>
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-danger"><i class="bi bi-save me-1"></i>Simpan</button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="scanUlang()"><i class="bi bi-arrow-repeat me-1"></i>Scan Lain</button>
-                        </div>
-                    </form>
-                `;
+                        <form id="formRusak">
+                            <input type="hidden" name="barang_id" value="${b.id}">
+                            <div class="mb-3">
+                                <label class="form-label">Lokasi</label>
+                                <select name="lokasi" class="form-select" onchange="toggleRuangan(this.value)">
+                                    <option value="dalam_ruangan">Dalam Ruangan</option>
+                                    <option value="luar_ruangan">Luar Ruangan</option>
+                                </select>
+                            </div>
+                            <div class="mb-3" id="ruanganField">
+                                <label class="form-label">Ruangan</label>
+                                <select name="ruangan_id" class="form-select">
+                                    <option value="">Pilih Ruangan</option>
+                                    ${ruanganOptions}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Jumlah Rusak <span class="text-danger">*</span></label>
+                                <input type="number" name="jumlah" class="form-control" value="1" min="1" required>
+                                <small class="text-muted">Jumlah unit yang rusak</small>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Jenis Kerusakan <span class="text-danger">*</span></label>
+                                <input type="text" name="jenis_kerusakan" class="form-control" required autofocus>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Deskripsi</label>
+                                <textarea name="deskripsi_kerusakan" class="form-control" rows="2"></textarea>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-danger"><i class="bi bi-save me-1"></i>Simpan</button>
+                                <button type="button" class="btn btn-outline-secondary" onclick="scanUlang()"><i class="bi bi-arrow-repeat me-1"></i>Scan Lain</button>
+                            </div>
+                        </form>
+                    `;
                         document.getElementById('formRusak').addEventListener('submit', submitForm);
                     } else {
                         document.getElementById('formArea').innerHTML = `
-                    <div class="alert alert-danger"><i class="bi bi-x-circle me-2"></i>${data.message}</div>
-                    <button class="btn btn-outline-primary" onclick="scanUlang()"><i class="bi bi-arrow-repeat me-1"></i>Coba Lagi</button>
-                `;
+                        <div class="alert alert-danger"><i class="bi bi-x-circle me-2"></i>${data.message}</div>
+                        <button class="btn btn-outline-primary" onclick="scanUlang()"><i class="bi bi-arrow-repeat me-1"></i>Coba Lagi</button>
+                    `;
                     }
                 });
         }
@@ -193,12 +193,12 @@
                 .then(data => {
                     if (data.success) {
                         document.getElementById('formArea').innerHTML = `
-                    <div class="alert alert-success"><i class="bi bi-check-circle me-2"></i>Laporan kerusakan berhasil disimpan!</div>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-primary" onclick="scanUlang()"><i class="bi bi-qr-code-scan me-1"></i>Scan Barang Lain</button>
-                        <a href="{{ route('barang-rusak.index') }}" class="btn btn-outline-secondary">Kembali ke Daftar</a>
-                    </div>
-                `;
+                        <div class="alert alert-success"><i class="bi bi-check-circle me-2"></i>Laporan kerusakan berhasil disimpan!</div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-primary" onclick="scanUlang()"><i class="bi bi-qr-code-scan me-1"></i>Scan Barang Lain</button>
+                            <a href="{{ route('barang-rusak.index') }}" class="btn btn-outline-secondary">Kembali ke Daftar</a>
+                        </div>
+                    `;
                     } else {
                         btn.disabled = false;
                         btn.innerHTML = '<i class="bi bi-save me-1"></i>Simpan';

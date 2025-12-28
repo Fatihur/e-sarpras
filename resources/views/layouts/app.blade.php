@@ -14,6 +14,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"
+        rel="stylesheet">
     <style>
         .dashboard-stat {
             background: #ffffff;
@@ -733,6 +736,7 @@
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('show');
@@ -745,6 +749,16 @@
                 if (window.innerWidth < 992) {
                     toggleSidebar();
                 }
+            });
+        });
+
+        // Initialize Select2 for searchable dropdowns
+        $(document).ready(function () {
+            $('.select2-searchable').select2({
+                theme: 'bootstrap-5',
+                width: '100%',
+                placeholder: $(this).data('placeholder') || 'Pilih...',
+                allowClear: true
             });
         });
     </script>

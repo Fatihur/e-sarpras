@@ -21,7 +21,7 @@
                                     tersedia</small>
                             </div>
                         @else
-                            <select name="barang_id" class="form-select" required>
+                            <select name="barang_id" class="form-select select2-searchable" required>
                                 <option value="">Pilih Barang</option>
                                 @foreach($barang as $b)
                                     <option value="{{ $b->id }}" {{ old('barang_id', request('barang_id')) == $b->id ? 'selected' : '' }}>

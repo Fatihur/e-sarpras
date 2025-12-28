@@ -13,11 +13,12 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Barang <span class="text-danger">*</span></label>
-                        <select name="barang_id" class="form-select" required>
+                        <select name="barang_id" class="form-select select2-searchable" required>
                             <option value="">Pilih Barang</option>
                             @foreach($barang as $b)
                                 <option value="{{ $b->id }}" {{ old('barang_id') == $b->id ? 'selected' : '' }}>
-                                    {{ $b->kode_barang }} - {{ $b->nama_barang }}</option>
+                                    {{ $b->kode_barang }} - {{ $b->nama_barang }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -32,11 +33,12 @@
                     </div>
                     <div class="col-md-6 mb-3" id="ruanganField">
                         <label class="form-label">Ruangan</label>
-                        <select name="ruangan_id" class="form-select">
+                        <select name="ruangan_id" class="form-select select2-searchable">
                             <option value="">Pilih Ruangan</option>
                             @foreach($ruangan as $r)
                                 <option value="{{ $r->id }}" {{ old('ruangan_id') == $r->id ? 'selected' : '' }}>
-                                    {{ $r->nama_ruangan }}</option>
+                                    {{ $r->nama_lengkap }}
+                                </option>
                             @endforeach
                         </select>
                     </div>

@@ -23,7 +23,7 @@ class Ruangan extends Model
     protected static function boot()
     {
         parent::boot();
-        
+
         static::creating(function ($model) {
             if (empty($model->kode_ruangan)) {
                 $model->kode_ruangan = self::generateKode();
@@ -57,5 +57,18 @@ class Ruangan extends Model
     public function barangRusak(): HasMany
     {
         return $this->hasMany(BarangRusak::class);
+    }
+
+    /**
+     * Get nama ruangan lengkap dengan nama gedung
+     * Format: "Nama Ruangan / Gedung Nama"
+     */
+    public function getNamaLengkapAttribute(): string
+    {
+        $nama = $this->nama_ruangan;
+        if ($this->gedung) {
+            $nama .= ' / ' . $this->gedung->nama_gedung;
+        }
+        return $nama;
     }
 }
