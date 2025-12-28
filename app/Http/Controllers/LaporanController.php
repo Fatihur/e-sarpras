@@ -243,5 +243,87 @@ class LaporanController extends Controller
 
         return view('laporan.barang-ruangan', compact('data', 'ruangan'));
     }
+
+    public function keseluruhan(Request $request)
+    {
+        $tanggalDari = $request->tanggal_dari;
+        $tanggalSampai = $request->tanggal_sampai;
+
+        // Query Barang Masuk
+        $queryMasuk = BarangMasuk::with(['barang', 'user']);
+        if ($tanggalDari)
+            $queryMasuk->whereDate('tanggal_masuk', '>=', $tanggalDari);
+        if ($tanggalSampai)
+            $queryMasuk->whereDate('tanggal_masuk', '<=', $tanggalSampai);
+        $barangMasuk = $queryMasuk->orderBy('tanggal_masuk', 'desc')->get();
+
+        // Query Barang Keluar
+        $queryKeluar = BarangKeluar::with(['barang', 'user']);
+        if ($tanggalDari)
+            $queryKeluar->whereDate('tanggal_keluar', '>=', $tanggalDari);
+        if ($tanggalSampai)
+            $queryKeluar->whereDate('tanggal_keluar', '<=', $tanggalSampai);
+        $barangKeluar = $queryKeluar->orderBy('tanggal_keluar', 'desc')->get();
+
+        // Query Peminjaman
+        $queryPinjam = Peminjaman::with(['barang', 'user']);
+        if ($tanggalDari)
+            $queryPinjam->whereDate('tanggal_pinjam', '>=', $tanggalDari);
+        if ($tanggalSampai)
+            $queryPinjam->whereDate('tanggal_pinjam', '<=', $tanggalSampai);
+        $peminjaman = $queryPinjam->orderBy('tanggal_pinjam', 'desc')->get();
+
+        // Query Barang Rusak
+        $queryRusak = BarangRusak::with(['barang', 'ruangan', 'user']);
+        if ($tanggalDari)
+            $queryRusak->whereDate('tanggal_rusak', '>=', $tanggalDari);
+        if ($tanggalSampai)
+            $queryRusak->whereDate('tanggal_rusak', '<=', $tanggalSampai);
+        $barangRusak = $queryRusak->orderBy('tanggal_rusak', 'desc')->get();
+
+        // Query Barang Ruangan (no date filter)
+        $barangRuangan = BarangRuangan::with(['barang', 'ruangan'])->get();
+
+        if ($request->export === 'pdf') {
+            $pdf = Pdf::loadView('laporan.pdf.keseluruhan', compact(
+                'barangMasuk',
+                'barangKeluar',
+                'peminjaman',
+                'barangRusak',
+                'barangRuangan',
+                'tanggalDari',
+                'tanggalSampai'
+            ));
+            $fileName = 'laporan-keseluruhan-' . now()->format('Y-m-d-His') . '.pdf';
+            $filePath = storage_path('app/public/' . $fileName);
+            $pdf->save($filePath);
+
+            $this->kirimKeTelegram($filePath, 'Laporan Keseluruhan', 'pdf');
+
+            return response()->download($filePath)->deleteFileAfterSend(true);
+        }
+
+        if ($request->export === 'excel') {
+            $fileName = 'laporan-keseluruhan-' . now()->format('Y-m-d-His') . '.xlsx';
+            $filePath = storage_path('app/public/' . $fileName);
+            $excelContent = Excel::raw(
+                new \App\Exports\LaporanKeseluruhanExport($barangMasuk, $barangKeluar, $peminjaman, $barangRusak, $barangRuangan),
+                \Maatwebsite\Excel\Excel::XLSX
+            );
+            file_put_contents($filePath, $excelContent);
+
+            $this->kirimKeTelegram($filePath, 'Laporan Keseluruhan', 'excel');
+
+            return response()->download($filePath)->deleteFileAfterSend(true);
+        }
+
+        return view('laporan.keseluruhan', compact(
+            'barangMasuk',
+            'barangKeluar',
+            'peminjaman',
+            'barangRusak',
+            'barangRuangan'
+        ));
+    }
 }
 

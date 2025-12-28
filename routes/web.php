@@ -159,5 +159,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/peminjaman', [LaporanController::class, 'peminjaman'])->name('peminjaman');
             Route::get('/barang-rusak', [LaporanController::class, 'barangRusak'])->name('barang-rusak');
             Route::get('/barang-ruangan', [LaporanController::class, 'barangRuangan'])->name('barang-ruangan');
+            Route::get('/keseluruhan', [LaporanController::class, 'keseluruhan'])->name('keseluruhan');
         });
 });
