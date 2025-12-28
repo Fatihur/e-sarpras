@@ -17,48 +17,6 @@ use App\Http\Controllers\ScanController;
 use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
-
-/*
-|--------------------------------------------------------------------------
-| TEMPORARY MIGRATION FIX ROUTE - HAPUS SETELAH DIGUNAKAN!
-|--------------------------------------------------------------------------
-*/
-Route::get('/run-migration-fix/{secret}', function ($secret) {
-    // Secret key untuk keamanan
-    if ($secret !== 'esarpras2024fix') {
-        abort(404);
-    }
-
-    $results = [];
-
-    // Fix 1: Tambah kolom jumlah ke barang_rusak
-    if (!Schema::hasColumn('barang_rusak', 'jumlah')) {
-        Schema::table('barang_rusak', function ($table) {
-            $table->integer('jumlah')->default(1)->after('deskripsi_kerusakan');
-        });
-        $results[] = '✅ Kolom "jumlah" berhasil ditambahkan ke tabel barang_rusak';
-    } else {
-        $results[] = '⚠️ Kolom "jumlah" sudah ada di tabel barang_rusak';
-    }
-
-    // Fix 2: Tambah kolom luas_bangunan ke lahan (jika belum ada)
-    try {
-        if (!Schema::hasColumn('lahan', 'luas_bangunan')) {
-            Schema::table('lahan', function ($table) {
-                $table->decimal('luas_bangunan', 10, 2)->nullable();
-            });
-            $results[] = '✅ Kolom "luas_bangunan" berhasil ditambahkan ke tabel lahan';
-        } else {
-            $results[] = '⚠️ Kolom "luas_bangunan" sudah ada di tabel lahan';
-        }
-    } catch (\Exception $e) {
-        $results[] = '⚠️ Tabel lahan: ' . $e->getMessage();
-    }
-
-    return '<h1>Migration Fix Results</h1><ul><li>' . implode('</li><li>', $results) . '</li></ul><br><strong>PENTING: Hapus route ini dari web.php setelah selesai!</strong>';
-});
 
 // Auth Routes
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
