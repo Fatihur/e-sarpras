@@ -651,6 +651,11 @@
                 <a href="{{ route('lahan.index') }}" class="nav-link {{ request()->routeIs('lahan.*') ? 'active' : '' }}">
                     <i class="bi bi-geo-alt"></i> Lahan
                 </a>
+            @elseif(auth()->user()->isManajemen())
+                <div class="nav-section">Master Data</div>
+                <a href="{{ route('barang.index') }}" class="nav-link {{ request()->routeIs('barang.*') ? 'active' : '' }}">
+                    <i class="bi bi-box"></i> Barang
+                </a>
             @endif
 
             <div class="nav-section">Transaksi</div>

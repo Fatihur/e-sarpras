@@ -62,11 +62,13 @@
                     infoFiltered: "(difilter dari _MAX_ total data)",
                     zeroRecords: "Tidak ada data yang cocok",
                     paginate: { first: "Pertama", last: "Terakhir", next: "›", previous: "‹" }
-                },
-                columnDefs: [
-                    { orderable: false, targets: [4] }
-                ]
+                }
+                    @if(auth()->user()->isAdmin())
+                        , columnDefs: [
+                            { orderable: false, targets: [4] }
+                        ]
+                    @endif
+                });
             });
-        });
     </script>
 @endpush

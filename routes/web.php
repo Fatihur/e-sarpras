@@ -93,6 +93,14 @@ Route::middleware('auth')->group(function () {
         Route::get('lahan', [LahanController::class, 'index'])->name('lahan.index');
         Route::get('gedung', [GedungController::class, 'index'])->name('gedung.index');
         Route::get('ruangan', [RuanganController::class, 'index'])->name('ruangan.index');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | ADMIN, PIMPINAN & MANAJEMEN - READ ONLY BARANG
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware('role:admin,pimpinan,manajemen')->group(function () {
         Route::get('barang', [BarangController::class, 'index'])->name('barang.index');
         Route::get('barang/{barang}', [BarangController::class, 'show'])->name('barang.show');
         Route::get('barang/{barang}/download-qr', [BarangController::class, 'downloadQr'])->name('barang.download-qr');

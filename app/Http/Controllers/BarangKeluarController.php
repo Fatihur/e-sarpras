@@ -27,7 +27,7 @@ class BarangKeluarController extends Controller
 
     public function create()
     {
-        $barang = Barang::where('status_barang', 'aktif')->where('jumlah', '>', 0)->get();
+        $barang = Barang::where('jumlah', '>', 0)->get();
         return view('barang-keluar.create', compact('barang'));
     }
 
@@ -43,7 +43,7 @@ class BarangKeluarController extends Controller
         ]);
 
         $barang = Barang::find($validated['barang_id']);
-        
+
         if ($barang->jumlah < $validated['jumlah']) {
             return back()->withErrors(['jumlah' => 'Jumlah melebihi stok yang tersedia.']);
         }
